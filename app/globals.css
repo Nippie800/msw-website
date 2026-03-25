@@ -5,4 +5,27 @@ html {
 body {
   background: black;
   color: white;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: inline-flex;
+  align-items: flex-start;
+  white-space: nowrap;
+  min-width: max-content;
+  animation: marqueeScroll 30s linear infinite;
+  will-change: transform;
 }
