@@ -1,6 +1,8 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import DropSection from "@/components/DropSection";
+import Manifesto from "@/components/Manifesto";
+import StorySection from "@/components/StorySection";
 
 export default function HomePage() {
   return (
@@ -8,6 +10,8 @@ export default function HomePage() {
       <Navbar />
       <Hero />
       <DropSection />
+      <Manifesto />
+      <StorySection />
     </main>
   );
 }

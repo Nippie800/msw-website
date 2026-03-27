@@ -11,9 +11,9 @@ export default function DropSection() {
               Drop 001
             </p>
 
-            <h2 className="text-4xl font-semibold uppercase tracking-tight md:text-6xl">
-              Current Drop
-            </h2>
+           <h2 className="text-4xl md:text-6xl lg:text-7xl font-semibold uppercase tracking-tight">
+  Current Drop
+</h2>
           </div>
 
           <p className="max-w-md text-sm leading-7 text-white/60 md:text-base">

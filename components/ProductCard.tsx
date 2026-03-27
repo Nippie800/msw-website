@@ -12,14 +12,14 @@ export default function ProductCard({ product }: ProductCardProps) {
       href={product.href}
       className="group block w-[190px] md:w-[240px]"
     >
-      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-3 transition group-hover:shadow-[0_10px_40px_rgba(255,255,255,0.08)]">
         <div className="flex items-center justify-center bg-black">
           <Image
             src={product.image}
             alt={product.name}
             width={700}
             height={700}
-            className="h-auto w-full object-contain transition duration-500 group-hover:scale-105"
+            className="h-auto w-full object-contain transition duration-500 ease-out group-hover:scale-105"
           />
         </div>
       </div>
