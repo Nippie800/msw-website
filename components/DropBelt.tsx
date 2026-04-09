@@ -8,18 +8,15 @@ export default function DropBelt() {
 
   return (
     <div className="relative w-full overflow-hidden">
-      {/* left fade */}
-      <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-black to-transparent md:w-24" />
-
-      {/* right fade */}
-      <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-black to-transparent md:w-24" />
+      <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-black to-transparent md:w-28" />
+      <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-black to-transparent md:w-28" />
 
       <div className="group w-full overflow-hidden">
         <div className="marquee-track group-hover:[animation-play-state:paused]">
           {beltProducts.map((product, index) => (
             <div
               key={`${product.id}-${index}`}
-              className="mr-5 inline-block align-top md:mr-8"
+              className="mr-6 inline-block align-top md:mr-10"
             >
               <ProductCard product={product} />
             </div>

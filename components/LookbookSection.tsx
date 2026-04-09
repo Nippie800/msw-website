@@ -16,7 +16,7 @@ export default function LookbookSection() {
             Campaign
           </p>
           <h2 className="text-4xl font-semibold uppercase tracking-tight md:text-6xl">
-            STREET LOOKS
+            Look Book
           </h2>
           <p className="mt-6 max-w-2xl text-sm leading-7 text-white/60 md:text-base">
             Real fits. Real movement. Real city energy.

@@ -1,57 +1,86 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import LogoExplosion from "@/components/LogoExplosion";
 
 export default function Hero() {
+  const [introDone, setIntroDone] = useState(false);
+
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-6 pt-24 text-white md:px-10">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.09),transparent_35%)]" />
+    <>
+      {!introDone && <LogoExplosion onComplete={() => setIntroDone(true)} />}
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center text-center">
-        <div className="mb-8 flex justify-center">
-          <div className="rounded-full border border-white/10 bg-white/[0.03] p-4 shadow-[0_0_50px_rgba(255,255,255,0.05)]">
-            <Image
-              src="/msw-logo.png"
-              alt="MSW logo"
-              width={120}
-              height={120}
-              className="h-auto w-[88px] md:w-[110px]"
-              priority
-            />
+      <section className="relative min-h-screen overflow-hidden bg-black text-white">
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        >
+          <source src="/videos/msw-hero.mp4" type="video/mp4" />
+        </video>
+
+        <div className="absolute inset-0 bg-black/55" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,0,0,0.12),rgba(0,0,0,0.72))]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: introDone ? 1 : 0 }}
+          transition={{ duration: 0.9, ease: "easeOut", delay: 0.1 }}
+          className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col items-center justify-center px-6 pt-24 text-center md:px-10 md:pt-28"
+        >
+          <div className="mb-8 flex justify-center md:mb-10">
+            
+              <Image
+                src="/msw-logo.png"
+                alt="MSW logo"
+                width={350}
+                height={350}
+                className="h-auto w-[250px] md:w-[250px]"
+                priority
+              />
+            
           </div>
-        </div>
 
-        <p className="mb-4 text-[10px] uppercase tracking-[0.45em] text-white/50 md:text-xs">
-          Made Somehow
-        </p>
+          <p className="mb-4 text-[10px] uppercase tracking-[0.45em] text-white/70 md:text-xs">
+            Made Somehow
+          </p>
 
-        <h1 className="max-w-5xl text-5xl font-semibold uppercase leading-[0.9] tracking-tight md:text-7xl lg:text-8xl">
-          MADE SOMEHOW
-        </h1>
+          <h1 className="max-w-5xl text-5xl font-semibold uppercase leading-[0.9] tracking-tight md:text-7xl lg:text-8xl">
+            MADE SOMEHOW
+          </h1>
 
-        <p className="mt-6 text-sm uppercase tracking-[0.28em] text-white/70 md:text-base">
-          One Way Or Another
-        </p>
+          <p className="mt-6 text-sm uppercase tracking-[0.28em] text-white/85 md:text-base">
+            One Way Or Another
+          </p>
 
-        <p className="mt-6 max-w-2xl text-sm leading-7 text-white/60 md:text-base">
-          Built for the ones who keep moving when the odds say stop.
-        </p>
+          <p className="mt-6 max-w-2xl text-sm leading-7 text-white/75 md:text-base">
+            Built for the ones who keep moving when the odds say stop.
+          </p>
 
-        <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-          <Link
-            href="/shop"
-            className="inline-flex items-center justify-center border border-white px-8 py-4 text-xs font-medium uppercase tracking-[0.3em] text-white transition hover:bg-white hover:text-black"
-          >
-            Shop The Drop
-          </Link>
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+            <Link
+              href="/shop"
+              className="inline-flex min-w-[190px] items-center justify-center border border-white bg-white px-8 py-4 text-xs font-medium uppercase tracking-[0.3em] text-black transition hover:bg-transparent hover:text-white"
+            >
+              Shop The Drop
+            </Link>
 
-          <Link
-            href="/story"
-            className="inline-flex items-center justify-center border border-white/20 px-8 py-4 text-xs font-medium uppercase tracking-[0.3em] text-white/80 transition hover:border-white hover:text-white"
-          >
-            Explore Story
-          </Link>
-        </div>
-      </div>
-    </section>
+            <Link
+              href="/story"
+              className="inline-flex min-w-[190px] items-center justify-center border border-white/30 bg-black/20 px-8 py-4 text-xs font-medium uppercase tracking-[0.3em] text-white backdrop-blur-sm transition hover:border-white hover:bg-black/35"
+            >
+              Explore Story
+            </Link>
+          </div>
+        </motion.div>
+      </section>
+    </>
   );
 }
