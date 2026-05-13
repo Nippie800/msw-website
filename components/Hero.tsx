@@ -22,7 +22,7 @@ export default function Hero() {
           playsInline
           preload="auto"
         >
-          <source src="/videos/msw-hero.mp4" type="video/mp4" />
+          <source src="/videos/MSW-HEROfin.mp4" type="video/mp4" />
         </video>
 
         <div className="absolute inset-0 bg-black/55" />
@@ -42,7 +42,7 @@ export default function Hero() {
                 alt="MSW logo"
                 width={350}
                 height={350}
-                className="h-auto w-[250px] md:w-[250px]"
+                className="h-auto w-[240px] sm:w-[320px] md:w-[1000px]"
                 priority
               />
             
@@ -52,7 +52,7 @@ export default function Hero() {
             Made Somehow
           </p>
 
-          <h1 className="max-w-5xl text-5xl font-semibold uppercase leading-[0.9] tracking-tight md:text-7xl lg:text-8xl">
+          <h1 className="max-w-5xl text-4xl sm:text-5xl md:text-7xl lg:text-8xl">
             MADE SOMEHOW
           </h1>
 
@@ -64,17 +64,17 @@ export default function Hero() {
             Built for the ones who keep moving when the odds say stop.
           </p>
 
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+          <div className="mt-8 flex w-full max-w-xs flex-col gap-3 sm:max-w-none sm:flex-row">
             <Link
               href="/shop"
-              className="inline-flex min-w-[190px] items-center justify-center border border-white bg-white px-8 py-4 text-xs font-medium uppercase tracking-[0.3em] text-black transition hover:bg-transparent hover:text-white"
+              className="inline-flex min-w-[190px] items-center justify-center border border-white bg-white w-full px-6 py-4 sm:w-auto text-xs font-medium uppercase tracking-[0.3em] text-black transition hover:bg-transparent hover:text-white"
             >
               Shop The Drop
             </Link>
 
             <Link
               href="/story"
-              className="inline-flex min-w-[190px] items-center justify-center border border-white/30 bg-black/20 px-8 py-4 text-xs font-medium uppercase tracking-[0.3em] text-white backdrop-blur-sm transition hover:border-white hover:bg-black/35"
+              className="inline-flex min-w-[190px] items-center justify-center border border-white/30 bg-black/20 w-full px-6 py-4 sm:w-auto text-xs font-medium uppercase tracking-[0.3em] text-white backdrop-blur-sm transition hover:border-white hover:bg-black/35"
             >
               Explore Story
             </Link>

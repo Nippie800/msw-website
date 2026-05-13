@@ -1,40 +1,80 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Product } from "@/data/products";
 
 type ProductCardProps = {
-  product: Product;
+  product: {
+    id: string;
+    name: string;
+    price: number;
+    images: string[];
+    stock: number;
+  };
 };
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({
+  product,
+}: ProductCardProps) {
+  const soldOut = product.stock <= 0;
+
   return (
-    <Link
-      href={product.href}
-      className="group block w-[210px] md:w-[260px]"
-    >
-      <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-3 transition duration-500 group-hover:border-white/20 group-hover:shadow-[0_15px_50px_rgba(255,255,255,0.06)]">
-        <div className="flex items-center justify-center bg-black">
+    <div className="group min-w-[220px] sm:min-w-[260px] md:min-w-[420px]">
+      <Link
+        href={`/shop/${product.id}`}
+        className="block"
+      >
+        {/* IMAGE */}
+        <div className="relative overflow-hidden bg-black">
+
+          {/* SOLD OUT */}
+          {soldOut && (
+            <div className="absolute left-4 top-4 z-10 border border-white/20 bg-black/80 px-3 py-1 text-[10px] uppercase tracking-[0.25em] text-white">
+              Sold Out
+            </div>
+          )}
+
           <Image
-            src={product.image}
+            src={product.images[0]}
             alt={product.name}
-            width={700}
-            height={700}
-            className="h-auto w-full object-contain transition duration-500 ease-out group-hover:scale-105"
+            width={1200}
+            height={1200}
+            className="
+              h-auto
+              w-full
+              object-contain
+              transition
+              duration-700
+              ease-out
+              group-hover:scale-[1.03]
+            "
           />
         </div>
-      </div>
 
-      <div className="mt-4">
-        <h3 className="text-sm font-medium uppercase tracking-[0.12em] text-white">
-          {product.name}
-        </h3>
+        {/* INFO */}
+        <div className="mt-5 space-y-2">
+          <h3 className="text-[11px] uppercase tracking-[0.2em] text-white">
+            {product.name}
+          </h3>
 
-        <p className="mt-2 text-sm text-white/60">{product.price}</p>
+          <p className="text-[11px] text-white/60">
+            R{product.price.toFixed(2)}
+          </p>
 
-        <span className="mt-3 inline-block text-[11px] uppercase tracking-[0.22em] text-white/70 transition group-hover:text-white">
-          View Item
-        </span>
-      </div>
-    </Link>
+          <p
+            className="
+              inline-block
+              text-[10px]
+              uppercase
+              tracking-[0.25em]
+              text-white/70
+              transition
+              duration-300
+              group-hover:text-white
+            "
+          >
+            View Item
+          </p>
+        </div>
+      </Link>
+    </div>
   );
 }

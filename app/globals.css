@@ -61,3 +61,8 @@ img {
 .animate-starTwinkle {
   animation: starTwinkle 3.5s ease-in-out infinite;
 }
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}

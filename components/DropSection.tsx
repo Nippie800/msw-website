@@ -16,10 +16,7 @@ export default function DropSection() {
             </h2>
           </div>
 
-          <p className="max-w-md text-sm leading-7 text-white/60 md:text-base md:text-right">
-            A moving preview of the current MSW release. Built for the ones who
-            keep going, one way or another.
-          </p>
+         
         </div>
 
         <DropBelt />

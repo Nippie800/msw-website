@@ -38,10 +38,10 @@ export default function StorySection() {
 
         <Reveal delay={0.12}>
           <div className="flex justify-center md:justify-end">
-            <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 shadow-[0_0_60px_rgba(255,255,255,0.04)]">
+           
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.10),transparent_45%)]" />
 
-              
+              <div className="relative flex items-center justify-center">
                 <Image
                   src="/msw-logo.png"
                   alt="MSW logo"
@@ -49,8 +49,8 @@ export default function StorySection() {
                   height={420}
                   className="h-auto w-full max-w-[280px] object-contain"
                 />
-              
-            </div>
+              </div>
+            
           </div>
         </Reveal>
       </div>
