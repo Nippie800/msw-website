@@ -2,7 +2,7 @@
 
 import { useCartStore } from "@/store/cart-store";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 
 export default function CheckoutPage() {
   const items = useCartStore((state) => state.items);
@@ -11,52 +11,167 @@ export default function CheckoutPage() {
     (total, item) => total + item.price * item.quantity,
     0
   );
-const [loading, setLoading] = useState(false);
-const handlePayment = async () => {
-  try {
-    setLoading(true);
 
-    const response = await fetch("/api/payfast", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: "MSW Customer",
-        email: "customer@email.com",
-        total: totalPrice,
-      }),
-    });
+  const [loading, setLoading] = useState(false);
 
-    const data = await response.json();
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    province: "",
+    postalCode: "",
+    joinCommunity: false,
+    acceptTerms: false,
+  });
+const [errors, setErrors] = useState({
+  name: "",
+  email: "",
+  phone: "",
+  address: "",
+  city: "",
+  province: "",
+  postalCode: "",
+  acceptTerms: "",
+});
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value, type, checked } = e.target;
 
-    if (data.url) {
-      window.location.href = data.url;
-    }
-  } catch (error) {
-    console.error(error);
-    alert("Payment failed.");
-  } finally {
-    setLoading(false);
-  }
+    setForm((prev) => ({
+      ...prev,
+      [name]:
+        type === "checkbox"
+          ? checked
+          : value,
+    }));
+  };
+const inputStyles = (error: string) => `
+  border
+  ${error ? "border-red-500" : "border-white/10"}
+  bg-white/[0.02]
+  px-5
+  py-5
+  text-sm
+  tracking-wide
+  text-white
+  outline-none
+  transition-all
+  duration-300
+  placeholder:text-white/25
+  focus:border-white
+  focus:bg-white/[0.03]
+`;
+  const handlePayment = async () => {
+   const newErrors = {
+  name: form.name ? "" : "Full name is required",
+  email: form.email ? "" : "Email address is required",
+  phone: form.phone ? "" : "Phone number is required",
+  address: form.address ? "" : "Street address is required",
+  city: form.city ? "" : "City is required",
+  province: form.province ? "" : "Province is required",
+  postalCode: form.postalCode ? "" : "Postal code is required",
+  acceptTerms: form.acceptTerms
+    ? ""
+    : "Please accept the terms and conditions",
 };
+
+setErrors(newErrors);
+
+const hasErrors = Object.values(newErrors).some(
+  (value) => value !== ""
+);
+
+if (hasErrors) {
+  return;
+}
+
+    try {
+      setLoading(true);
+
+      const customer = {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        address: `${form.address}, ${form.city}, ${form.province}, ${form.postalCode}`,
+        joinCommunity: form.joinCommunity,
+      };
+
+      /*
+        1. STORE ORDER
+      */
+    const orderResponse = await fetch("/api/orders", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+
+  body: JSON.stringify({
+    customer,
+    items,
+    total: totalPrice,
+  }),
+});
+
+const orderData = await orderResponse.json();
+
+      /*
+        2. INITIALIZE PAYMENT
+      */
+      const response = await fetch("/api/payfast", {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          name: customer.name,
+          email: customer.email,
+          total: totalPrice,
+        }),
+      });
+
+      const data = await response.json();
+
+      
+if (data.url) {
+  localStorage.setItem(
+    "msw_last_order",
+    JSON.stringify({
+      orderNumber: orderData.orderNumber,
+      items,
+      total: totalPrice,
+    })
+  );
+
+  window.location.href = data.url;
+}
+    } catch (error) {
+      console.error(error);
+
+      alert("Checkout failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-black px-4 pb-24 pt-28 text-white sm:px-6 md:px-10 md:pt-36">
       <div className="mx-auto grid max-w-[1600px] gap-14 lg:grid-cols-[1fr_460px] lg:gap-24">
 
         {/* LEFT SIDE */}
         <div className="max-w-3xl">
-          {/* LABEL */}
           <p className="text-[10px] uppercase tracking-[0.4em] text-white/35">
             Checkout
           </p>
 
-          {/* TITLE */}
           <h1 className="mt-5 text-4xl font-semibold uppercase leading-none tracking-tight sm:text-5xl md:text-7xl">
             Secure Checkout
           </h1>
 
-          {/* SUBTEXT */}
           <p className="mt-6 max-w-xl text-sm leading-7 text-white/50 md:text-base">
             Complete your order securely. Built for the ones who keep moving,
             one way or another.
@@ -72,65 +187,50 @@ const handlePayment = async () => {
               </h2>
 
               <div className="grid gap-5">
-                <input
-                  type="text"
-                  placeholder="Full Name"
-                  className="
-                    border border-white/10
-                    bg-white/[0.02]
-                    px-5
-                    py-5
-                    text-sm
-                    tracking-wide
-                    text-white
-                    outline-none
-                    transition-all
-                    duration-300
-                    placeholder:text-white/25
-                    focus:border-white
-                    focus:bg-white/[0.03]
-                  "
-                />
+               <input
+  type="text"
+  name="name"
+  value={form.name}
+  onChange={handleChange}
+  placeholder="Full Name"
+  className={inputStyles(errors.name)}
+/>
 
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  className="
-                    border border-white/10
-                    bg-white/[0.02]
-                    px-5
-                    py-5
-                    text-sm
-                    tracking-wide
-                    text-white
-                    outline-none
-                    transition-all
-                    duration-300
-                    placeholder:text-white/25
-                    focus:border-white
-                    focus:bg-white/[0.03]
-                  "
-                />
+{errors.name && (
+  <p className="mt-2 text-xs tracking-wide text-red-400">
+    {errors.name}
+  </p>
+)}
 
-                <input
-                  type="tel"
-                  placeholder="Phone Number"
-                  className="
-                    border border-white/10
-                    bg-white/[0.02]
-                    px-5
-                    py-5
-                    text-sm
-                    tracking-wide
-                    text-white
-                    outline-none
-                    transition-all
-                    duration-300
-                    placeholder:text-white/25
-                    focus:border-white
-                    focus:bg-white/[0.03]
-                  "
-                />
+            <input
+  type="email"
+  name="email"
+  value={form.email}
+  onChange={handleChange}
+  placeholder="Email Address"
+  className={inputStyles(errors.email)}
+/>
+
+{errors.email && (
+  <p className="mt-2 text-xs tracking-wide text-red-400">
+    {errors.email}
+  </p>
+)}
+
+               <input
+  type="tel"
+  name="phone"
+  value={form.phone}
+  onChange={handleChange}
+  placeholder="Phone Number"
+  className={inputStyles(errors.phone)}
+/>
+
+{errors.phone && (
+  <p className="mt-2 text-xs tracking-wide text-red-400">
+    {errors.phone}
+  </p>
+)}
               </div>
             </div>
 
@@ -142,86 +242,107 @@ const handlePayment = async () => {
 
               <div className="grid gap-5">
                 <input
-                  type="text"
-                  placeholder="Street Address"
-                  className="
-                    border border-white/10
-                    bg-white/[0.02]
-                    px-5
-                    py-5
-                    text-sm
-                    tracking-wide
-                    text-white
-                    outline-none
-                    transition-all
-                    duration-300
-                    placeholder:text-white/25
-                    focus:border-white
-                    focus:bg-white/[0.03]
-                  "
-                />
+  type="text"
+  name="address"
+  value={form.address}
+  onChange={handleChange}
+  placeholder="Street Address"
+  className={inputStyles(errors.address)}
+/>
 
-                <input
-                  type="text"
-                  placeholder="City"
-                  className="
-                    border border-white/10
-                    bg-white/[0.02]
-                    px-5
-                    py-5
-                    text-sm
-                    tracking-wide
-                    text-white
-                    outline-none
-                    transition-all
-                    duration-300
-                    placeholder:text-white/25
-                    focus:border-white
-                    focus:bg-white/[0.03]
-                  "
-                />
+{errors.address && (
+  <p className="mt-2 text-xs tracking-wide text-red-400">
+    {errors.address}
+  </p>
+)}
+               <input
+  type="text"
+  name="city"
+  value={form.city}
+  onChange={handleChange}
+  placeholder="City"
+  className={inputStyles(errors.city)}
+/>
+
+{errors.city && (
+  <p className="mt-2 text-xs tracking-wide text-red-400">
+    {errors.city}
+  </p>
+)}
 
                 <div className="grid gap-5 sm:grid-cols-2">
                   <input
-                    type="text"
-                    placeholder="Province"
-                    className="
-                      border border-white/10
-                      bg-white/[0.02]
-                      px-5
-                      py-5
-                      text-sm
-                      tracking-wide
-                      text-white
-                      outline-none
-                      transition-all
-                      duration-300
-                      placeholder:text-white/25
-                      focus:border-white
-                      focus:bg-white/[0.03]
-                    "
-                  />
+  type="text"
+  name="province"
+  value={form.province}
+  onChange={handleChange}
+  placeholder="Province"
+  className={inputStyles(errors.province)}
+/>
+
+{errors.province && (
+  <p className="mt-2 text-xs tracking-wide text-red-400">
+    {errors.province}
+  </p>
+)}
 
                   <input
-                    type="text"
-                    placeholder="Postal Code"
-                    className="
-                      border border-white/10
-                      bg-white/[0.02]
-                      px-5
-                      py-5
-                      text-sm
-                      tracking-wide
-                      text-white
-                      outline-none
-                      transition-all
-                      duration-300
-                      placeholder:text-white/25
-                      focus:border-white
-                      focus:bg-white/[0.03]
-                    "
-                  />
+  type="text"
+  name="postalCode"
+  value={form.postalCode}
+  onChange={handleChange}
+  placeholder="Postal Code"
+  className={inputStyles(errors.postalCode)}
+/>
+
+{errors.postalCode && (
+  <p className="mt-2 text-xs tracking-wide text-red-400">
+    {errors.postalCode}
+  </p>
+)}
                 </div>
+              </div>
+
+              {/* CHECKBOXES */}
+              <div className="mt-10 space-y-5 border-t border-white/10 pt-8">
+
+                {/* COMMUNITY */}
+                <label className="flex items-start gap-4">
+                  <input
+                    type="checkbox"
+                    name="joinCommunity"
+                    checked={form.joinCommunity}
+                    onChange={handleChange}
+                    className="mt-1 h-4 w-4 accent-white"
+                  />
+
+                  <span className="text-sm leading-6 text-white/60">
+                    Join the MSW community for early drops,
+                    exclusive updates and future releases.
+                  </span>
+                </label>
+
+                {/* TERMS */}
+                <label className="flex items-start gap-4">
+                    {errors.acceptTerms && (
+  <p className="text-xs tracking-wide text-red-400">
+    {errors.acceptTerms}
+  </p>
+)}
+                  <input
+                    type="checkbox"
+                    name="acceptTerms"
+                    checked={form.acceptTerms}
+                    onChange={handleChange}
+                    className="mt-1 h-4 w-4 accent-white"
+                  />
+
+                  <span className="text-sm leading-6 text-white/60">
+                    I agree to the terms and conditions
+                    and understand that all orders are
+                    subject to processing and availability.
+                  </span>
+                </label>
               </div>
             </div>
           </div>
@@ -230,19 +351,16 @@ const handlePayment = async () => {
         {/* RIGHT SIDE */}
         <div className="h-fit border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl md:p-8 lg:sticky lg:top-28">
 
-          {/* TITLE */}
           <h2 className="text-[11px] uppercase tracking-[0.35em] text-white/45">
             Order Summary
           </h2>
 
-          {/* ITEMS */}
           <div className="mt-8 space-y-7">
             {items.map((item) => (
               <div
                 key={`${item.id}-${item.size}`}
                 className="flex items-start gap-5"
               >
-                {/* IMAGE */}
                 <div className="relative h-28 w-24 overflow-hidden bg-black md:h-32 md:w-28">
                   <Image
                     src={item.image}
@@ -252,7 +370,6 @@ const handlePayment = async () => {
                   />
                 </div>
 
-                {/* INFO */}
                 <div className="flex-1">
                   <h3 className="text-[11px] uppercase tracking-[0.22em] text-white">
                     {item.name}
@@ -267,7 +384,6 @@ const handlePayment = async () => {
                   </p>
                 </div>
 
-                {/* PRICE */}
                 <p className="text-sm font-medium text-white">
                   R{(item.price * item.quantity).toFixed(2)}
                 </p>
@@ -287,40 +403,40 @@ const handlePayment = async () => {
               </p>
             </div>
 
-           <button
-  onClick={handlePayment}
-  disabled={loading || items.length === 0}
-  className="
-    mt-8
-    flex
-    w-full
-    items-center
-    justify-center
-    border
-    border-white
-    bg-white
-    px-6
-    py-5
-    text-xs
-    font-medium
-    uppercase
-    tracking-[0.35em]
-    text-black
-    transition-all
-    duration-300
-    hover:scale-[1.01]
-    hover:bg-transparent
-    hover:text-white
-    active:scale-[0.99]
-    disabled:cursor-not-allowed
-    disabled:border-white/10
-    disabled:bg-white/5
-    disabled:text-white/30
-  "
->
-  {loading ? "Redirecting..." : "Continue To Payment"}
-</button>
-            {/* SECURITY */}
+            <button
+              onClick={handlePayment}
+              disabled={loading || items.length === 0}
+              className="
+                mt-8
+                flex
+                w-full
+                items-center
+                justify-center
+                border
+                border-white
+                bg-white
+                px-6
+                py-5
+                text-xs
+                font-medium
+                uppercase
+                tracking-[0.35em]
+                text-black
+                transition-all
+                duration-300
+                hover:scale-[1.01]
+                hover:bg-transparent
+                hover:text-white
+                active:scale-[0.99]
+                disabled:cursor-not-allowed
+                disabled:border-white/10
+                disabled:bg-white/5
+                disabled:text-white/30
+              "
+            >
+              {loading ? "Redirecting..." : "Continue To Payment"}
+            </button>
+
             <p className="mt-5 text-center text-xs text-white/30">
               Secure payment powered by PayFast
             </p>
