@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 
 import { useCartStore } from "@/store/cart-store";
 import { useUIStore } from "@/store/ui-store";
+import Link from "next/link";
 
 export default function CartDrawer() {
   const isCartOpen = useUIStore((state) => state.isCartOpen);
@@ -154,37 +155,65 @@ export default function CartDrawer() {
         </div>
 
         {/* FOOTER */}
-        <div className="border-t border-white/10 px-6 py-6">
-          <div className="mb-6 flex items-center justify-between">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-white/45">
-              Subtotal
-            </p>
+<div className="border-t border-white/10 bg-black/95 px-6 py-6 backdrop-blur-xl">
+  <div className="mb-6 flex items-center justify-between">
+    <p className="text-[10px] uppercase tracking-[0.3em] text-white/45">
+      Subtotal
+    </p>
 
-            <p className="text-lg">
-              R{subtotal.toFixed(2)}
-            </p>
-          </div>
+    <p className="text-lg font-medium">
+      R{subtotal.toFixed(2)}
+    </p>
+  </div>
 
-          <button
-            className="
-              w-full
-              border
-              border-white
-              bg-white
-              px-8
-              py-5
-              text-xs
-              uppercase
-              tracking-[0.3em]
-              text-black
-              transition
-              hover:bg-transparent
-              hover:text-white
-            "
-          >
-            Checkout
-          </button>
-        </div>
+  {items.length > 0 ? (
+    <Link
+      href="/checkout"
+      onClick={closeCart}
+      className="
+        flex
+        w-full
+        items-center
+        justify-center
+        border
+        border-white
+        bg-white
+        px-8
+        py-5
+        text-center
+        text-xs
+        uppercase
+        tracking-[0.3em]
+        text-black
+        transition
+        duration-300
+        hover:bg-transparent
+        hover:text-white
+      "
+    >
+      Secure Checkout
+    </Link>
+  ) : (
+    <button
+      disabled
+      className="
+        w-full
+        cursor-not-allowed
+        border
+        border-white/10
+        bg-white/5
+        px-8
+        py-5
+        text-xs
+        uppercase
+        tracking-[0.3em]
+        text-white/25
+      "
+    >
+      Cart Empty
+    </button>
+  )}
+</div>
       </div>
     </>
   );
