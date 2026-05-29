@@ -6,6 +6,10 @@ import "./globals.css";
 import CartDrawer from "@/components/CartDrawer";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 
+import {
+  CurrencyProvider,
+} from "@/context/CurrencyContext";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -37,9 +41,14 @@ export default function RootLayout({
           />
         )}
 
-        <CartDrawer />
+        <CurrencyProvider>
 
-        {children}
+          <CartDrawer />
+
+          {children}
+
+        </CurrencyProvider>
+
       </body>
     </html>
   );

@@ -49,6 +49,36 @@ type Subscriber = {
     seconds: number;
   };
 };
+const ORDER_STATUSES = [
+  "paid",
+  "processing",
+  "shipped",
+  "delivered",
+  "cancelled",
+];
+const getStatusColor = (
+  status: string
+) => {
+  switch (status) {
+    case "paid":
+      return "text-green-400";
+
+    case "processing":
+      return "text-yellow-400";
+
+    case "shipped":
+      return "text-blue-400";
+
+    case "delivered":
+      return "text-purple-400";
+
+    case "cancelled":
+      return "text-red-400";
+
+    default:
+      return "text-white";
+  }
+};
 export default function AdminPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -262,6 +292,33 @@ const handleCreateProduct = async () => {
     setCreatingProduct(false);
   }
 };
+const handleUpdateOrderStatus = async (
+  orderId: string,
+  status: string
+) => {
+  try {
+    await updateDoc(
+      doc(db, "orders", orderId),
+      {
+        status,
+      }
+    );
+
+    setOrders((prev) =>
+      prev.map((order) =>
+        order.id === orderId
+          ? {
+              ...order,
+              status,
+            }
+          : order
+      )
+    );
+
+  } catch (error) {
+    console.error(error);
+  }
+};
   return (
     
     <main className="min-h-screen bg-black px-5 py-10 text-white md:px-10">
@@ -403,9 +460,39 @@ const handleCreateProduct = async () => {
                   {/* RIGHT */}
                   <div className="flex flex-col items-start gap-3 md:items-end">
 
-                    <div className="border border-green-500/20 bg-green-500/10 px-4 py-2 text-[10px] uppercase tracking-[0.3em] text-green-400">
-                      {order.status}
-                    </div>
+                    <select
+                    aria-label="Order Status"
+  value={order.status}
+  onChange={(e) =>
+    handleUpdateOrderStatus(
+      order.id,
+      e.target.value
+    )
+  }
+ className={`
+  border
+  border-white/10
+  bg-black
+  px-4
+  py-2
+  text-[10px]
+  uppercase
+  tracking-[0.25em]
+  outline-none
+  ${getStatusColor(order.status)}
+`}
+>
+
+  {ORDER_STATUSES.map((status) => (
+    <option
+      key={status}
+      value={status}
+    >
+      {status}
+    </option>
+  ))}
+
+</select>
 
                     <p className="text-2xl font-semibold">
                       R{order.total.toFixed(2)}
