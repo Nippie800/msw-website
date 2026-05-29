@@ -42,9 +42,18 @@ type Product = {
   stock: number;
   image: string;
 };
+type Subscriber = {
+  id: string;
+  email: string;
+  createdAt?: {
+    seconds: number;
+  };
+};
 export default function AdminPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [subscribers, setSubscribers] =
+  useState<Subscriber[]>([]);
   const [editingProduct, setEditingProduct] =
   useState<string | null>(null);
 
@@ -106,11 +115,33 @@ const [newProduct, setNewProduct] =
     console.error(error);
   }
 };
+const fetchSubscribers = async () => {
+  try {
+    const q = query(
+      collection(db, "communitySubscribers"),
+      orderBy("createdAt", "desc")
+    );
+
+    const snapshot = await getDocs(q);
+
+    const formattedSubscribers =
+      snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Subscriber[];
+
+    setSubscribers(formattedSubscribers);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 
 fetchProducts();
 
     fetchOrders();
+    fetchSubscribers();
   }, []);
 
   useEffect(() => {
@@ -269,7 +300,7 @@ const handleCreateProduct = async () => {
       </div>
 
       {/* STATS */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
 
         <div className="border border-white/10 bg-white/[0.03] p-5">
           <p className="text-[10px] uppercase tracking-[0.3em] text-white/40">
@@ -300,6 +331,17 @@ const handleCreateProduct = async () => {
             {products.length}
           </h2>
         </div>
+        <div className="border border-white/10 bg-white/[0.03] p-5">
+
+  <p className="text-[10px] uppercase tracking-[0.3em] text-white/40">
+    Community
+  </p>
+
+  <h2 className="mt-4 text-4xl font-semibold">
+    {subscribers.length}
+  </h2>
+
+</div>
 
       </div>
 
@@ -764,6 +806,56 @@ const handleCreateProduct = async () => {
 
   </div>
 )}
+{/* COMMUNITY */}
+<div className="mt-20">
+
+  <div className="mb-6 flex items-center justify-between">
+    <h2 className="text-xl font-semibold uppercase tracking-[0.15em]">
+      Community
+    </h2>
+  </div>
+
+  {subscribers.length === 0 ? (
+    <div className="border border-white/10 bg-white/[0.03] p-6 text-white/40">
+      No subscribers yet.
+    </div>
+  ) : (
+    <div className="space-y-4">
+
+      {subscribers.map((subscriber) => (
+        <div
+          key={subscriber.id}
+          className="
+            border
+            border-white/10
+            bg-white/[0.03]
+            p-5
+          "
+        >
+
+          <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+
+            <div>
+
+              <p className="text-[10px] uppercase tracking-[0.3em] text-white/35">
+                Subscriber
+              </p>
+
+              <h3 className="mt-2 text-lg font-semibold">
+                {subscriber.email}
+              </h3>
+
+            </div>
+
+          </div>
+
+        </div>
+      ))}
+
+    </div>
+  )}
+
+</div>
     </main>
   );
   
