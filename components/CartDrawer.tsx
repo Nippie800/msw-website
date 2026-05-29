@@ -6,12 +6,14 @@ import { X } from "lucide-react";
 import { useCartStore } from "@/store/cart-store";
 import { useUIStore } from "@/store/ui-store";
 import Link from "next/link";
+import { useCurrency } from "@/context/CurrencyContext";
 
 export default function CartDrawer() {
   const isCartOpen = useUIStore((state) => state.isCartOpen);
 
   const closeCart = useUIStore((state) => state.closeCart);
 
+  const { convertPrice } = useCurrency();
   const {
     items,
     removeItem,
@@ -110,8 +112,11 @@ export default function CartDrawer() {
                     </p>
 
                     <p className="mt-2 text-sm text-white/75">
-                      R{item.price.toFixed(2)}
-                    </p>
+  {convertPrice(item.price)}
+</p>
+<p className="mt-1 text-xs text-white/40">
+  Total: {convertPrice(item.price * item.quantity)}
+</p>
 
                     {/* QUANTITY */}
                     <div className="mt-4 flex items-center gap-3">
@@ -162,8 +167,8 @@ export default function CartDrawer() {
     </p>
 
     <p className="text-lg font-medium">
-      R{subtotal.toFixed(2)}
-    </p>
+  {convertPrice(subtotal)}
+</p>
   </div>
 
   {items.length > 0 ? (

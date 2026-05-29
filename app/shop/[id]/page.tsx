@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { products } from "@/data/products";
 import AddToCartSection from "@/components/AddToCartSection";
 
+import ProductPrice from "@/components/ProductPrice";
 export default async function ProductPage({
   params,
 }: {
@@ -55,10 +56,10 @@ export default async function ProductPage({
             {product.name}
           </h1>
 
-          {/* PRICE */}
-          <p className="mt-6 text-xl text-white/75 md:text-2xl">
-            R{product.price.toFixed(2)}
-          </p>
+      {/* PRICE */}
+<p className="mt-6 text-xl text-white/75 md:text-2xl">
+  <ProductPrice price={product.price} />
+</p>
 
           {/* DESCRIPTION */}
           <p className="mt-8 max-w-xl text-sm leading-8 text-white/60 md:text-base">

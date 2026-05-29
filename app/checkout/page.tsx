@@ -3,9 +3,11 @@
 import { useCartStore } from "@/store/cart-store";
 import Image from "next/image";
 import { useState, ChangeEvent } from "react";
+import { useCurrency } from "@/context/CurrencyContext";
 
 export default function CheckoutPage() {
   const items = useCartStore((state) => state.items);
+  const { convertPrice } = useCurrency();
 
   const totalPrice = items.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -382,11 +384,16 @@ if (data.url) {
                   <p className="mt-1 text-sm text-white/45">
                     Qty: {item.quantity}
                   </p>
+                  <p className="mt-1 text-sm text-white/45">
+  Each: {convertPrice(item.price)}
+</p>
                 </div>
 
                 <p className="text-sm font-medium text-white">
-                  R{(item.price * item.quantity).toFixed(2)}
-                </p>
+  {convertPrice(
+    item.price * item.quantity
+  )}
+</p>
               </div>
             ))}
           </div>
@@ -399,8 +406,8 @@ if (data.url) {
               </p>
 
               <p className="text-3xl font-semibold tracking-tight">
-                R{totalPrice.toFixed(2)}
-              </p>
+  {convertPrice(totalPrice)}
+</p>
             </div>
 
             <button
