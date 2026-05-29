@@ -14,6 +14,14 @@ import {
 
 import { db } from "@/lib/firebase";
 
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+
+import { storage } from "@/lib/firebase";
+
 type Order = {
   id: string;
   orderNumber: string;
@@ -52,9 +60,12 @@ const [newProduct, setNewProduct] =
     name: "",
     price: "",
     stock: "",
-    image: "",
+    image: null as File | null,
   });
   const [loading, setLoading] = useState(true);
+
+  const [creatingProduct, setCreatingProduct] =
+  useState(false);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -95,7 +106,14 @@ const [newProduct, setNewProduct] =
     console.error(error);
   }
 };
-useEffect(() => {
+
+
+fetchProducts();
+
+    fetchOrders();
+  }, []);
+
+  useEffect(() => {
   if (showAddModal) {
     document.body.style.overflow = "hidden";
   } else {
@@ -106,11 +124,6 @@ useEffect(() => {
     document.body.style.overflow = "auto";
   };
 }, [showAddModal]);
-
-fetchProducts();
-
-    fetchOrders();
-  }, []);
 
  const totalRevenue = orders.reduce(
   (total, order) => total + order.total,
@@ -149,22 +162,44 @@ const handleSaveProduct = async (
 };
 
 const handleCreateProduct = async () => {
-    
+  if (
+    !newProduct.name ||
+    !newProduct.price ||
+    !newProduct.stock
+  ) {
+    return;
+  }
+
+  if (!newProduct.image) {
+    return;
+  }
+
+  setCreatingProduct(true);
+
   try {
-    if (
-  !newProduct.name ||
-  !newProduct.price ||
-  !newProduct.stock
-) {
-  return;
-}
+    const imageRef = ref(
+      storage,
+      `products/${Date.now()}-${newProduct.image.name}`
+    );
+
+    await uploadBytes(
+      imageRef,
+      newProduct.image
+    );
+
+    const imageUrl =
+      await getDownloadURL(imageRef);
+
     const docRef = await addDoc(
       collection(db, "products"),
       {
         name: newProduct.name,
         price: Number(newProduct.price),
         stock: Number(newProduct.stock),
-        image: newProduct.image,
+        image: imageUrl,
+
+        // future-proof
+        sizes: ["S", "M", "L", "XL"],
       }
     );
 
@@ -173,7 +208,7 @@ const handleCreateProduct = async () => {
       name: newProduct.name,
       price: Number(newProduct.price),
       stock: Number(newProduct.stock),
-      image: newProduct.image,
+      image: imageUrl,
     };
 
     setProducts((prev) => [
@@ -187,11 +222,13 @@ const handleCreateProduct = async () => {
       name: "",
       price: "",
       stock: "",
-      image: "",
+      image: null,
     });
 
   } catch (error) {
     console.error(error);
+  } finally {
+    setCreatingProduct(false);
   }
 };
   return (
@@ -376,6 +413,19 @@ const handleCreateProduct = async () => {
 
           {/* INFO */}
           <div>
+          <img
+  src={product.image}
+  alt={product.name}
+  className="
+    mb-4
+    h-24
+    w-24
+    rounded-lg
+    border
+    border-white/10
+    object-cover
+  "
+/>
             <h3 className="text-lg font-semibold">
               {product.name}
             </h3>
@@ -600,28 +650,65 @@ const handleCreateProduct = async () => {
           "
         />
 
-        <input
-          type="text"
-          placeholder="Image URL"
-          value={newProduct.image}
-          onChange={(e) =>
-            setNewProduct((prev) => ({
-              ...prev,
-              image: e.target.value,
-            }))
-          }
-          className="
-            w-full
-            border
-            border-white/10
-            bg-white/[0.03]
-            px-5
-            py-4
-            text-sm
-            text-white
-            outline-none
-          "
-        />
+        <div>
+
+  <label
+    className="
+      flex
+      cursor-pointer
+      items-center
+      justify-center
+      border
+      border-dashed
+      border-white/15
+      bg-white/[0.02]
+      px-5
+      py-10
+      text-center
+      text-sm
+      text-white/55
+      transition
+      hover:border-white/40
+      hover:text-white
+    "
+  >
+    {newProduct.image
+      ? newProduct.image.name
+      : "Tap to Upload Product Image"}
+
+    <input
+      type="file"
+      accept="image/*"
+      className="hidden"
+      onChange={(e) => {
+        const file = e.target.files?.[0];
+
+        if (file) {
+          setNewProduct((prev) => ({
+            ...prev,
+            image: file,
+          }));
+        }
+      }}
+    />
+  </label>
+  {newProduct.image && (
+  <img
+    src={URL.createObjectURL(newProduct.image)}
+    alt="Preview"
+    className="
+      mt-4
+      h-48
+      w-full
+      rounded-lg
+      border
+      border-white/10
+      object-cover
+    "
+  />
+)}
+
+</div>
 
       </div>
 
@@ -629,25 +716,28 @@ const handleCreateProduct = async () => {
       <div className="mt-10 flex gap-4">
 
         <button
-          onClick={handleCreateProduct}
-          className="
-            flex-1
-            border
-            border-white
-            bg-white
-            px-6
-            py-4
-            text-[10px]
-            uppercase
-            tracking-[0.3em]
-            text-black
-            transition
-            hover:bg-transparent
-            hover:text-white
-          "
-        >
-          Create Product
-        </button>
+  disabled={creatingProduct}
+  onClick={handleCreateProduct}
+  className={`
+    flex-1
+    border
+    px-6
+    py-4
+    text-[10px]
+    uppercase
+    tracking-[0.3em]
+    transition
+    ${
+      creatingProduct
+        ? "cursor-not-allowed border-white/10 bg-white/10 text-white/40"
+        : "border-white bg-white text-black hover:bg-transparent hover:text-white"
+    }
+  `}
+>
+  {creatingProduct
+    ? "Uploading..."
+    : "Create Product"}
+</button>
 
         <button
           onClick={() => setShowAddModal(false)}
