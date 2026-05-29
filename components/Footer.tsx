@@ -2,7 +2,8 @@ import EmailCapture from "@/components/EmailCapture";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-black px-6 py-16 text-white md:px-10 md:py-24">
+    <footer
+  id="community" className="border-t border-white/10 bg-black px-6 py-16 text-white md:px-10 md:py-24">
 
       <div className="mx-auto max-w-7xl">
 

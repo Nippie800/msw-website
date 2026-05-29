@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import CartButton from "@/components/CartButton";
+import CurrencySelector from "@/components/CurrencySelector";
 
 const navLinks = [
   { name: "Shop", href: "/shop" },
-  { name: "Story", href: "/story" },
-  { name: "Community", href: "/community" },
+  //{ name: "Story", href: "/story" },
+  { name: "Community", href: "#community" },
 ];
 
 export default function Navbar() {
@@ -52,6 +53,7 @@ export default function Navbar() {
             </Link>
             
           ))}
+           <CurrencySelector />
           <CartButton />
         </div>
       </div>

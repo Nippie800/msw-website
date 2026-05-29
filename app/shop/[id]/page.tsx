@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { products } from "@/data/products";
+import { getProduct } from "@/lib/products";
 import AddToCartSection from "@/components/AddToCartSection";
 
 import ProductPrice from "@/components/ProductPrice";
@@ -12,7 +12,7 @@ export default async function ProductPage({
 }) {
   const { id } = await params;
 
-  const product = products.find((p) => p.id === id);
+  const product = await getProduct(id);
 
   if (!product) {
     notFound();

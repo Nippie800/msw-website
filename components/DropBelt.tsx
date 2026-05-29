@@ -1,10 +1,26 @@
 "use client";
 
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/data/products";
 
-export default function DropBelt() {
-  const beltProducts = [...products, ...products];
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  stock: number;
+  images: string[];
+};
+
+type DropBeltProps = {
+  products: Product[];
+};
+
+export default function DropBelt({
+  products,
+}: DropBeltProps) {
+  const beltProducts = [
+    ...products,
+    ...products,
+  ];
 
   return (
     <div className="relative w-full overflow-hidden py-10 md:py-16">
@@ -18,17 +34,22 @@ export default function DropBelt() {
       <div className="group w-full overflow-hidden">
         <div className="marquee-track group-hover:[animation-play-state:paused]">
 
-          {beltProducts.map((product, index) => (
-            <div
-              key={`${product.id}-${index}`}
-              className="mr-8 inline-block align-top sm:mr-12 md:mr-20"
-            >
-              <ProductCard product={product} />
-            </div>
-          ))}
+          {beltProducts.map(
+            (product, index) => (
+              <div
+                key={`${product.id}-${index}`}
+                className="mr-8 inline-block align-top sm:mr-12 md:mr-20"
+              >
+                <ProductCard
+                  product={product}
+                />
+              </div>
+            )
+          )}
 
         </div>
       </div>
+
     </div>
   );
 }

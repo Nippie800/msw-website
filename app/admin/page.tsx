@@ -10,6 +10,7 @@ import {
   orderBy,
   query,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 import { db } from "@/lib/firebase";
@@ -28,6 +29,8 @@ type Order = {
   customer: {
     name: string;
     email: string;
+    phone?: string;
+  address?: string;
   };
   total: number;
   status: string;
@@ -79,8 +82,11 @@ const getStatusColor = (
       return "text-white";
   }
 };
+
 export default function AdminPage() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [selectedOrder, setSelectedOrder] =
+  useState<string | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [subscribers, setSubscribers] =
   useState<Subscriber[]>([]);
@@ -292,6 +298,31 @@ const handleCreateProduct = async () => {
     setCreatingProduct(false);
   }
 };
+const handleDeleteProduct = async (
+  productId: string
+) => {
+  const confirmed = window.confirm(
+    "Delete this product permanently?"
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await deleteDoc(
+      doc(db, "products", productId)
+    );
+
+    setProducts((prev) =>
+      prev.filter(
+        (product) =>
+          product.id !== productId
+      )
+    );
+
+  } catch (error) {
+    console.error(error);
+  }
+};
 const handleUpdateOrderStatus = async (
   orderId: string,
   status: string
@@ -317,6 +348,15 @@ const handleUpdateOrderStatus = async (
 
   } catch (error) {
     console.error(error);
+  }
+};
+const toggleOrder = (
+  orderId: string
+) => {
+  if (selectedOrder === orderId) {
+    setSelectedOrder(null);
+  } else {
+    setSelectedOrder(orderId);
   }
 };
   return (
@@ -497,9 +537,60 @@ const handleUpdateOrderStatus = async (
                     <p className="text-2xl font-semibold">
                       R{order.total.toFixed(2)}
                     </p>
+                    <button
+  onClick={() =>
+    toggleOrder(order.id)
+  }
+  className="
+    mt-4
+    border
+    border-white/10
+    px-4
+    py-2
+    text-[10px]
+    uppercase
+    tracking-[0.25em]
+    text-white/70
+    transition
+    hover:text-white
+  "
+>
+  {selectedOrder === order.id
+    ? "Hide Details"
+    : "View Details"}
+</button>
 
                   </div>
+{selectedOrder === order.id && (
+  <div
+    className="
+      mt-6
+      border-t
+      border-white/10
+      pt-6
+    "
+  >
 
+    <div className="space-y-2">
+
+      <h4 className="text-xs uppercase tracking-[0.25em] text-white/40">
+        Customer
+      </h4>
+
+      <p>{order.customer?.name}</p>
+
+      <p>{order.customer?.email}</p>
+
+      <p>{order.customer?.phone}</p>
+
+      <p>
+        {order.customer?.address}
+      </p>
+
+    </div>
+
+  </div>
+)}
                 </div>
 
               </div>
@@ -511,6 +602,7 @@ const handleUpdateOrderStatus = async (
         
 
       </div>
+      
       {/* PRODUCTS */}
 <div className="mt-20">
 
@@ -635,6 +727,30 @@ const handleUpdateOrderStatus = async (
       >
         Save
       </button>
+      <button
+  onClick={() =>
+    handleDeleteProduct(
+      product.id
+    )
+  }
+  className="
+    mt-3
+    w-full
+    border
+    border-red-500/20
+    bg-red-500/10
+    px-4
+    py-3
+    text-[10px]
+    uppercase
+    tracking-[0.3em]
+    text-red-400
+    transition
+    hover:bg-red-500/20
+  "
+>
+  Delete Product
+</button>
 
     </div>
   ) : (
