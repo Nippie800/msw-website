@@ -69,12 +69,6 @@ export default async function ProductPage({
           {/* ADD TO CART + SIZE SELECTOR */}
           <AddToCartSection product={product} />
 
-          {/* STOCK */}
-          <p className="mt-8 text-sm text-white/45">
-            {soldOut
-              ? "Currently unavailable"
-              : `${product.stock} pieces remaining`}
-          </p>
 
         </div>
       </div>
