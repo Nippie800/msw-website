@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { getProduct } from "@/lib/products";
 import AddToCartSection from "@/components/AddToCartSection";
-
+import Link from "next/link";
 import ProductPrice from "@/components/ProductPrice";
 export default async function ProductPage({
   params,
@@ -24,9 +24,24 @@ export default async function ProductPage({
     <section className="bg-black px-5 py-28 text-white md:px-10 md:py-36">
       <div className="mx-auto grid max-w-7xl gap-14 md:grid-cols-2 md:gap-24">
 
+
         {/* LEFT SIDE — PRODUCT IMAGE */}
         <div className="relative overflow-hidden bg-black">
-
+<Link
+  href="/shop"
+  className="
+    mb-8
+    inline-flex
+    text-[10px]
+    uppercase
+    tracking-[0.3em]
+    text-white/50
+    transition
+    hover:text-white
+  "
+>
+  ← Back To Shop
+</Link>
           {soldOut && (
             <div className="absolute left-5 top-5 z-10 border border-white/20 bg-black/80 px-4 py-2 text-[10px] uppercase tracking-[0.3em] text-white">
               Sold Out

@@ -214,8 +214,24 @@ const inputStyles = (error: string) => `
     <main className="min-h-screen bg-black px-4 pb-24 pt-28 text-white sm:px-6 md:px-10 md:pt-36">
       <div className="mx-auto grid max-w-[1600px] gap-14 lg:grid-cols-[1fr_460px] lg:gap-24">
 
+
         {/* LEFT SIDE */}
         <div className="max-w-3xl">
+          <Link
+  href="/shop"
+  className="
+    mb-8
+    inline-flex
+    text-[10px]
+    uppercase
+    tracking-[0.3em]
+    text-white/50
+    transition
+    hover:text-white
+  "
+>
+  ← Continue Shopping
+</Link>
           <p className="text-[10px] uppercase tracking-[0.4em] text-white/35">
             Checkout
           </p>

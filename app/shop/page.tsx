@@ -1,5 +1,6 @@
 import ProductCard from "@/components/ProductCard";
 import { getProducts } from "@/lib/products";
+import Link from "next/link";
 const products = await getProducts();
 export default function ShopPage() {
   return (
@@ -9,10 +10,25 @@ export default function ShopPage() {
 
         {/* HEADER */}
         <div className="mb-14">
-
+<Link
+  href="/"
+  className="
+    mb-6
+    inline-flex
+    text-[10px]
+    uppercase
+    tracking-[0.3em]
+    text-white/50
+    transition
+    hover:text-white
+  "
+>
+  ← Home
+</Link>
           <p className="text-[10px] uppercase tracking-[0.4em] text-white/35">
             Made Somehow
           </p>
+
 
           <h1 className="mt-4 text-4xl font-semibold uppercase tracking-tight md:text-6xl">
             Shop

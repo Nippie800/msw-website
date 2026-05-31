@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useCartStore } from "@/store/cart-store";
+import { useUIStore } from "@/store/ui-store";
 
 type AddToCartSectionProps = {
   product: {
@@ -25,6 +26,10 @@ export default function AddToCartSection({
   const addItem = useCartStore((state) => state.addItem);
 
   const soldOut = product.stock <= 0;
+
+  const openCart = useUIStore(
+  (state) => state.openCart
+);
 
   const handleAddToCart = () => {
     if (!selectedSize) return;
@@ -168,8 +173,7 @@ setShowAddedModal(true);
          onClick={() => {
   setShowAddedModal(false);
 
-  window.location.href =
-    "/checkout";
+  openCart();
 }}
           className="
             border
