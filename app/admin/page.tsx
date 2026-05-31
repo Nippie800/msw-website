@@ -1,6 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  onAuthStateChanged,
+} from "firebase/auth";
+
+import { auth } from "@/lib/firebase";
+
+import { ADMIN_EMAILS } from "@/lib/admin";
 
 import {
   addDoc,
@@ -109,8 +120,41 @@ const [newProduct, setNewProduct] =
   });
   const [loading, setLoading] = useState(true);
 
+  const [authorized, setAuthorized] =
+  useState(false);
+
   const [creatingProduct, setCreatingProduct] =
   useState(false);
+
+  useEffect(() => {
+  const unsubscribe =
+    onAuthStateChanged(
+      auth,
+      (user) => {
+        if (!user) {
+          window.location.href =
+            "/admin/login";
+
+          return;
+        }
+
+        if (
+          !ADMIN_EMAILS.includes(
+            user.email || ""
+          )
+        ) {
+          window.location.href =
+            "/admin/login";
+
+          return;
+        }
+
+        setAuthorized(true);
+      }
+    );
+
+  return () => unsubscribe();
+}, []);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -359,6 +403,13 @@ const toggleOrder = (
     setSelectedOrder(orderId);
   }
 };
+if (!authorized) {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-black text-white">
+      Loading...
+    </div>
+  );
+}
   return (
     
     <main className="min-h-screen bg-black px-5 py-10 text-white md:px-10">
