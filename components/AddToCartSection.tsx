@@ -19,6 +19,9 @@ export default function AddToCartSection({
 }: AddToCartSectionProps) {
   const [selectedSize, setSelectedSize] = useState("");
 
+  const [showAddedModal, setShowAddedModal] =
+  useState(false);
+
   const addItem = useCartStore((state) => state.addItem);
 
   const soldOut = product.stock <= 0;
@@ -27,13 +30,15 @@ export default function AddToCartSection({
     if (!selectedSize) return;
 
     addItem({
-      id: product.id,
-      name: product.name,
-      image: product.images[0],
-      size: selectedSize,
-      price: product.price,
-      quantity: 1,
-    });
+  id: product.id,
+  name: product.name,
+  image: product.images[0],
+  size: selectedSize,
+  price: product.price,
+  quantity: 1,
+});
+
+setShowAddedModal(true);
   };
 
   return (
@@ -96,6 +101,97 @@ export default function AddToCartSection({
         {soldOut ? "Sold Out" : "Add To Cart"}
       </button>
 
+{showAddedModal && (
+  <div
+    className="
+      fixed
+      inset-0
+      z-[100]
+      flex
+      items-center
+      justify-center
+      bg-black/70
+      backdrop-blur-sm
+      px-6
+    "
+  >
+    <div
+      className="
+        w-full
+        max-w-md
+        border
+        border-white/10
+        bg-black
+        p-8
+        text-center
+      "
+    >
+      <p className="text-green-400 text-sm uppercase tracking-[0.3em]">
+        Added To Cart
+      </p>
+
+      <h3 className="mt-4 text-2xl font-semibold">
+        {product.name}
+      </h3>
+
+      <p className="mt-2 text-white/50">
+        Size {selectedSize}
+      </p>
+
+      <div className="mt-8 flex flex-col gap-3">
+
+        <button
+            onClick={() => {
+    setShowAddedModal(false);
+
+    window.location.href =
+      "/shop";
+  }}
+          className="
+            border
+            border-white
+            px-6
+            py-4
+            text-xs
+            uppercase
+            tracking-[0.3em]
+            text-white
+            transition
+            hover:bg-white
+            hover:text-black
+          "
+        >
+          Continue Shopping
+        </button>
+
+        <button
+         onClick={() => {
+  setShowAddedModal(false);
+
+  window.location.href =
+    "/checkout";
+}}
+          className="
+            border
+            border-white/20
+            px-6
+            py-4
+            text-xs
+            uppercase
+            tracking-[0.3em]
+            text-white/70
+            transition
+            hover:border-white
+            hover:text-white
+          "
+        >
+          View Cart
+        </button>
+
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

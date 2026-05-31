@@ -1,5 +1,5 @@
 import EmailCapture from "@/components/EmailCapture";
-
+import Link from "next/link";
 export default function Footer() {
   return (
     <footer
@@ -49,6 +49,13 @@ export default function Footer() {
 
         </div>
 
+<Link href="/terms">
+  Shipping Policy
+</Link>
+
+<Link href="/returns">
+  Returns Policy
+</Link>
         {/* BOTTOM BAR */}
         <div className="mt-12 border-t border-white/10 pt-6">
 

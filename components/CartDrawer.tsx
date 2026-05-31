@@ -176,25 +176,20 @@ export default function CartDrawer() {
       href="/checkout"
       onClick={closeCart}
       className="
-        flex
-        w-full
-        items-center
-        justify-center
-        border
-        border-white
-        bg-white
-        px-8
-        py-5
-        text-center
-        text-xs
-        uppercase
-        tracking-[0.3em]
-        text-black
-        transition
-        duration-300
-        hover:bg-transparent
-        hover:text-white
-      "
+w-full
+border
+border-white
+bg-transparent
+px-6
+py-4
+text-xs
+uppercase
+tracking-[0.3em]
+text-white
+transition
+hover:bg-white
+hover:text-black
+"
     >
       Secure Checkout
     </Link>
