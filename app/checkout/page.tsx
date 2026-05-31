@@ -4,6 +4,7 @@ import { useCartStore } from "@/store/cart-store";
 import Image from "next/image";
 import { useState, ChangeEvent } from "react";
 import { useCurrency } from "@/context/CurrencyContext";
+import Link from "next/link";
 
 export default function CheckoutPage() {
   const items = useCartStore((state) => state.items);
@@ -67,66 +68,101 @@ const inputStyles = (error: string) => `
   focus:bg-white/[0.03]
 `;
   const handlePayment = async () => {
-   const newErrors = {
-  name: form.name ? "" : "Full name is required",
-  email: form.email ? "" : "Email address is required",
-  phone: form.phone ? "" : "Phone number is required",
-  address: form.address ? "" : "Street address is required",
-  city: form.city ? "" : "City is required",
-  province: form.province ? "" : "Province is required",
-  postalCode: form.postalCode ? "" : "Postal code is required",
-  acceptTerms: form.acceptTerms
-    ? ""
-    : "Please accept the terms and conditions",
-};
+  const newErrors = {
+    name: form.name.trim()
+      ? ""
+      : "Full name is required",
 
-setErrors(newErrors);
+    email: form.email.trim()
+      ? ""
+      : "Email address is required",
 
-const hasErrors = Object.values(newErrors).some(
-  (value) => value !== ""
-);
+    phone: form.phone.trim()
+      ? ""
+      : "Phone number is required",
 
-if (hasErrors) {
-  return;
-}
+    address: form.address.trim()
+      ? ""
+      : "Street address is required",
 
-    try {
-      setLoading(true);
+    city: form.city.trim()
+      ? ""
+      : "City is required",
 
-      const customer = {
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        address: `${form.address}, ${form.city}, ${form.province}, ${form.postalCode}`,
-        joinCommunity: form.joinCommunity,
-      };
+    province: form.province.trim()
+      ? ""
+      : "Province is required",
 
-      /*
-        1. STORE ORDER
-      */
-    const orderResponse = await fetch("/api/orders", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
+    postalCode: form.postalCode.trim()
+      ? ""
+      : "Postal code is required",
 
-  body: JSON.stringify({
-    customer,
-    items,
-    total: totalPrice,
-  }),
-});
+    acceptTerms: form.acceptTerms
+      ? ""
+      : "You must accept the Shipping & Returns Policy before continuing.",
+  };
 
-const orderData = await orderResponse.json();
+  setErrors(newErrors);
 
-      /*
-        2. INITIALIZE PAYMENT
-      */
-      const response = await fetch("/api/payfast", {
+  const hasErrors = Object.values(
+    newErrors
+  ).some((value) => value !== "");
+
+  if (hasErrors) {
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const customer = {
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      address: `${form.address}, ${form.city}, ${form.province}, ${form.postalCode}`,
+      joinCommunity: form.joinCommunity,
+    };
+
+    /*
+      1. CREATE ORDER
+    */
+    const orderResponse = await fetch(
+      "/api/orders",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+
+        body: JSON.stringify({
+          customer,
+          items,
+          total: totalPrice,
+        }),
+      }
+    );
+
+    if (!orderResponse.ok) {
+      throw new Error(
+        "Failed to create order"
+      );
+    }
+
+    const orderData =
+      await orderResponse.json();
+
+    /*
+      2. INITIALIZE PAYFAST
+    */
+    const response = await fetch(
+      "/api/payfast",
+      {
         method: "POST",
 
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type":
+            "application/json",
         },
 
         body: JSON.stringify({
@@ -134,31 +170,45 @@ const orderData = await orderResponse.json();
           email: customer.email,
           total: totalPrice,
         }),
-      });
+      }
+    );
 
-      const data = await response.json();
-
-      
-if (data.url) {
-  localStorage.setItem(
-    "msw_last_order",
-    JSON.stringify({
-      orderNumber: orderData.orderNumber,
-      items,
-      total: totalPrice,
-    })
-  );
-
-  window.location.href = data.url;
-}
-    } catch (error) {
-      console.error(error);
-
-      alert("Checkout failed.");
-    } finally {
-      setLoading(false);
+    if (!response.ok) {
+      throw new Error(
+        "Failed to initialize payment"
+      );
     }
-  };
+
+    const data =
+      await response.json();
+
+    /*
+      3. SAVE ORDER LOCALLY
+    */
+    if (data.url) {
+      localStorage.setItem(
+        "msw_last_order",
+        JSON.stringify({
+          orderNumber:
+            orderData.orderNumber,
+          items,
+          total: totalPrice,
+        })
+      );
+
+      window.location.href =
+        data.url;
+    }
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      "Something went wrong while processing your order. Please try again."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <main className="min-h-screen bg-black px-4 pb-24 pt-28 text-white sm:px-6 md:px-10 md:pt-36">
@@ -324,27 +374,66 @@ if (data.url) {
                   </span>
                 </label>
 
-                {/* TERMS */}
-                <label className="flex items-start gap-4">
-                    {errors.acceptTerms && (
-  <p className="text-xs tracking-wide text-red-400">
-    {errors.acceptTerms}
-  </p>
-)}
-                  <input
-                    type="checkbox"
-                    name="acceptTerms"
-                    checked={form.acceptTerms}
-                    onChange={handleChange}
-                    className="mt-1 h-4 w-4 accent-white"
-                  />
+               {/* TERMS */}
+<div>
 
-                  <span className="text-sm leading-6 text-white/60">
-                    I agree to the terms and conditions
-                    and understand that all orders are
-                    subject to processing and availability.
-                  </span>
-                </label>
+  <label className="flex items-start gap-4">
+
+    <input
+      type="checkbox"
+      name="acceptTerms"
+      checked={form.acceptTerms}
+      onChange={handleChange}
+      className="mt-1 h-4 w-4 accent-white"
+    />
+
+    <span className="text-sm leading-6 text-white/60">
+
+      I agree to the{" "}
+
+      <Link
+        href="/terms"
+        target="_blank"
+        className="
+          text-white
+          underline
+          underline-offset-4
+          transition
+          hover:text-white/70
+        "
+      >
+        Shipping Policy
+      </Link>
+
+      {" "}and{" "}
+
+      <Link
+        href="/returns"
+        target="_blank"
+        className="
+          text-white
+          underline
+          underline-offset-4
+          transition
+          hover:text-white/70
+        "
+      >
+        Returns Policy
+      </Link>
+
+      .
+
+    </span>
+
+  </label>
+
+  {errors.acceptTerms && (
+    <p className="mt-3 text-xs tracking-wide text-red-400">
+      {errors.acceptTerms}
+    </p>
+  )}
+
+</div>
               </div>
             </div>
           </div>
