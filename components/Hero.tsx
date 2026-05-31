@@ -64,21 +64,35 @@ export default function Hero() {
             Built for the ones who keep moving when the odds say stop.
           </p>
 
-          <div className="mt-8 flex w-full max-w-xs flex-col gap-3 sm:max-w-none sm:flex-row">
-            <Link
-              href="/shop"
-              className="inline-flex min-w-[190px] items-center justify-center border border-white bg-white w-full px-6 py-4 sm:w-auto text-xs font-medium uppercase tracking-[0.3em] text-black transition hover:bg-transparent hover:text-white"
-            >
-              Shop The Drop
-            </Link>
+          <div className="mt-8 flex w-full max-w-xs flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center">
 
-            <Link
-              href="/story"
-              className="inline-flex min-w-[190px] items-center justify-center border border-white/30 bg-black/20 w-full px-6 py-4 sm:w-auto text-xs font-medium uppercase tracking-[0.3em] text-white backdrop-blur-sm transition hover:border-white hover:bg-black/35"
-            >
-              Explore Story
-            </Link>
-          </div>
+  <Link
+  href="/shop"
+  className="
+    inline-flex
+    min-w-[220px]
+    items-center
+    justify-center
+    border
+    border-white
+    bg-transparent
+    px-8
+    py-4
+    text-xs
+    font-medium
+    uppercase
+    tracking-[0.3em]
+    text-white
+    transition
+    duration-300
+    hover:bg-white
+    hover:text-black
+  "
+>
+  Shop The Drop
+</Link>
+
+</div>
         </motion.div>
       </section>
     </>
