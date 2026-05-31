@@ -21,8 +21,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Made Somehow",
-  description: "Premium fashion apparel.",
+  title: "Made Somehow | One Way Or Another",
+  description:
+    "Premium fashion apparel built for the ones who keep moving.",
+
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({

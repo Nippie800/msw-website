@@ -3,15 +3,45 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import LogoExplosion from "@/components/LogoExplosion";
+import { useEffect, useState } from "react";
 
 export default function Hero() {
-  const [introDone, setIntroDone] = useState(false);
+  
+const [introDone, setIntroDone] =
+  useState(false);
 
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setIntroDone(true);
+  }, 1000);
+
+  return () => clearTimeout(timer);
+}, []);
   return (
     <>
-      {!introDone && <LogoExplosion onComplete={() => setIntroDone(true)} />}
+      {!introDone && (
+  <div
+    className="
+      fixed
+      inset-0
+      z-[999]
+      flex
+      items-center
+      justify-center
+      bg-black
+      animate-fade-out
+    "
+  >
+    <Image
+      src="/msw-logo.png"
+      alt="MSW"
+      width={260}
+      height={260}
+      priority
+      className="animate-pulse"
+    />
+  </div>
+)}
 
       <section className="relative min-h-screen overflow-hidden bg-black text-white">
         <video

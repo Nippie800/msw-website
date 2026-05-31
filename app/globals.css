@@ -66,3 +66,21 @@ video {
   max-width: 100%;
   height: auto;
 }
+@keyframes fadeOutIntro {
+  0% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.animate-fade-out {
+  animation: fadeOutIntro 1s ease forwards;
+}
