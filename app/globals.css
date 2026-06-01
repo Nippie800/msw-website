@@ -116,3 +116,23 @@ video {
 .animate-fade-out {
   animation: fadeOutIntro 1s ease forwards;
 }
+@keyframes mobileSwoosh {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.mobile-marquee {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+
+  animation: mobileSwoosh 35s linear infinite;
+
+  will-change: transform;
+  transform: translateZ(0);
+}

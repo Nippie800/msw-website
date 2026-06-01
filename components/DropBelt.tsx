@@ -54,24 +54,38 @@ export default function DropBelt({
       </div>
 
       {/* MOBILE RUNWAY */}
-      <div
-        className="
-          flex
-          gap-6
-          overflow-x-auto
-          px-1
-          pb-4
-          md:hidden
-          snap-x
-          snap-mandatory
-          scrollbar-hide
-        "
-      >
+<div className="relative overflow-hidden md:hidden">
+  <div className="mobile-marquee">
+
+    {[...products, ...products].map(
+      (product, index) => (
+        <div
+          key={`${product.id}-${index}`}
+          className="
+            flex-shrink-0
+            w-[72vw]
+            max-w-[320px]
+          "
+        >
+          <ProductCard
+            product={product}
+          />
+        </div>
+      )
+    )}
+
+  </div>
+</div>
         {products.map((product) => (
           <div
-            key={product.id}
-            className="snap-center flex-shrink-0"
-          >
+  key={product.id}
+  className="
+    snap-center
+    flex-shrink-0
+    w-[72vw]
+    max-w-[320px]
+  "
+>
             <ProductCard product={product} />
           </div>
         ))}
