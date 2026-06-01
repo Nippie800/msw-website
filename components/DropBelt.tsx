@@ -38,57 +38,43 @@ export default function DropBelt({
         <div className="group w-full overflow-hidden">
           <div className="marquee-track group-hover:[animation-play-state:paused]">
 
-            {beltProducts.map(
-              (product, index) => (
-                <div
-                  key={`${product.id}-${index}`}
-                  className="mr-20 inline-block align-top"
-                >
-                  <ProductCard product={product} />
-                </div>
-              )
-            )}
+            {beltProducts.map((product, index) => (
+              <div
+                key={`${product.id}-${index}`}
+                className="mr-20 inline-block align-top"
+              >
+                <ProductCard product={product} />
+              </div>
+            ))}
 
           </div>
         </div>
       </div>
 
       {/* MOBILE RUNWAY */}
-<div className="relative overflow-hidden md:hidden">
-  <div className="mobile-marquee">
+      <div className="relative overflow-hidden md:hidden">
 
-    {[...products, ...products].map(
-      (product, index) => (
-        <div
-          key={`${product.id}-${index}`}
-          className="
-            flex-shrink-0
-            w-[72vw]
-            max-w-[320px]
-          "
-        >
-          <ProductCard
-            product={product}
-          />
+        <div className="mobile-marquee">
+
+          {[...products, ...products].map(
+            (product, index) => (
+              <div
+                key={`${product.id}-${index}`}
+                className="
+                  flex-shrink-0
+                  w-[72vw]
+                  max-w-[320px]
+                "
+              >
+                <ProductCard
+                  product={product}
+                />
+              </div>
+            )
+          )}
+
         </div>
-      )
-    )}
 
-  </div>
-</div>
-        {products.map((product) => (
-          <div
-  key={product.id}
-  className="
-    snap-center
-    flex-shrink-0
-    w-[72vw]
-    max-w-[320px]
-  "
->
-            <ProductCard product={product} />
-          </div>
-        ))}
       </div>
 
     </div>
