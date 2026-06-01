@@ -28,12 +28,23 @@ img {
   max-width: 100%;
 }
 
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* =========================================
+   DROP BELT
+========================================= */
+
 @keyframes marqueeScroll {
   0% {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
+
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -42,9 +53,29 @@ img {
   align-items: flex-start;
   white-space: nowrap;
   min-width: max-content;
-  animation: marqueeScroll 36s linear infinite;
+
+  /* Slower = more premium */
+  animation: marqueeScroll 80s linear infinite;
+
+  /* Safari/iPhone fixes */
   will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
 }
+
+/* Mobile Safari optimization */
+@media (max-width: 768px) {
+  .marquee-track {
+    animation-duration: 120s;
+  }
+}
+
+/* =========================================
+   STARS
+========================================= */
 
 @keyframes starTwinkle {
   0%,
@@ -52,6 +83,7 @@ img {
     opacity: 0.25;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.9;
     transform: scale(1.35);
@@ -61,11 +93,11 @@ img {
 .animate-starTwinkle {
   animation: starTwinkle 3.5s ease-in-out infinite;
 }
-img,
-video {
-  max-width: 100%;
-  height: auto;
-}
+
+/* =========================================
+   INTRO FADE
+========================================= */
+
 @keyframes fadeOutIntro {
   0% {
     opacity: 1;
