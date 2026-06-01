@@ -20,6 +20,9 @@ export default function AddToCartSection({
 }: AddToCartSectionProps) {
   const [selectedSize, setSelectedSize] = useState("");
 
+  const [sizeError, setSizeError] =
+  useState(false);
+
   const [showAddedModal, setShowAddedModal] =
   useState(false);
 
@@ -32,19 +35,24 @@ export default function AddToCartSection({
 );
 
   const handleAddToCart = () => {
-    if (!selectedSize) return;
+  if (!selectedSize) {
+    setSizeError(true);
+    return;
+  }
 
-    addItem({
-  id: product.id,
-  name: product.name,
-  image: product.images[0],
-  size: selectedSize,
-  price: product.price,
-  quantity: 1,
-});
+  setSizeError(false);
 
-setShowAddedModal(true);
-  };
+  addItem({
+    id: product.id,
+    name: product.name,
+    image: product.images[0],
+    size: selectedSize,
+    price: product.price,
+    quantity: 1,
+  });
+
+  setShowAddedModal(true);
+};
 
   return (
     <div className="mt-12">
@@ -57,7 +65,10 @@ setShowAddedModal(true);
         {product.sizes.map((size) => (
           <button
             key={size}
-            onClick={() => setSelectedSize(size)}
+            onClick={() => {
+  setSelectedSize(size);
+  setSizeError(false);
+}}
             className={`
               border
               px-5
@@ -80,6 +91,11 @@ setShowAddedModal(true);
         ))}
       </div>
 
+{sizeError && (
+  <p className="mt-4 text-xs uppercase tracking-[0.2em] text-white/60">
+    Please select a size first
+  </p>
+)}
       <button
         disabled={soldOut}
         onClick={handleAddToCart}
