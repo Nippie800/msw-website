@@ -50,39 +50,39 @@ export async function POST(req: Request) {
       );
     }
 
-    const paymentData: Record<
-      string,
-      string
-    > = {
-      merchant_id: merchantId,
+    console.log({
+  merchantId,
+  merchantKey,
+  returnUrl,
+  cancelUrl,
+  notifyUrl,
+  passphrase,
+});
+   const paymentData = {
+  merchant_id: merchantId,
 
-      merchant_key: merchantKey,
+  merchant_key: merchantKey,
 
-      return_url: returnUrl,
+  return_url: returnUrl,
 
-      cancel_url: cancelUrl,
+  cancel_url: cancelUrl,
 
-      notify_url: notifyUrl,
+  notify_url: notifyUrl,
 
-      name_first: name,
+  name_first: name,
 
-      email_address: email,
+  email_address: email,
 
-      amount: Number(total).toFixed(
-        2
-      ),
+  amount: Number(total).toFixed(2),
 
-      item_name: "MSW Order",
-    };
+  item_name: "MSW Order",
+};
 
     /*
       Add passphrase if present
     */
 
-    if (passphrase) {
-      paymentData.passphrase =
-        passphrase;
-    }
+   
 
     const queryString =
       new URLSearchParams(
@@ -96,19 +96,18 @@ export async function POST(req: Request) {
       url: paymentUrl,
     });
   } catch (error) {
-    console.error(
-      "PAYFAST ERROR:",
-      error
-    );
+   console.error(
+  "PAYFAST ERROR:",
+  error
+);
 
-    return NextResponse.json(
-      {
-        error:
-          "Payment initialization failed",
-      },
-      {
-        status: 500,
-      }
-    );
+return NextResponse.json(
+  {
+    error: String(error),
+  },
+  {
+    status: 500,
+  }
+);
   }
 }
