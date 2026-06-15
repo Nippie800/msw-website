@@ -393,51 +393,107 @@ const inputStyles = (error: string) => `
                {/* TERMS */}
 <div>
 
-  <label className="flex items-start gap-3 cursor-pointer">
-
-  <input
-    type="checkbox"
-    checked={form.acceptTerms}
-    onChange={(e) =>
+  <label
+  className="
+    mt-6
+    flex
+    cursor-pointer
+    items-start
+    gap-3
+    select-none
+  "
+>
+  <button
+    type="button"
+    onClick={() =>
       setForm({
         ...form,
-        acceptTerms: e.target.checked,
+        acceptTerms: !form.acceptTerms,
       })
     }
     className="
-      mt-[2px]
+      relative
 
+      flex
       h-5
       w-5
-
-      accent-white
-
-      rounded-none
+      shrink-0
+      items-center
+      justify-center
 
       border
       border-white/40
 
       bg-black
-    "
-  />
 
-  <span className="text-sm text-white/65 leading-relaxed">
+      transition-all
+      duration-300
+
+      hover:border-white
+    "
+  >
+
+    {/* Tick */}
+
+    <span
+      className={`
+        absolute
+
+        text-xs
+        text-white
+
+        transition-all
+        duration-200
+
+        ${
+          form.acceptTerms
+            ? "scale-100 opacity-100"
+            : "scale-50 opacity-0"
+        }
+      `}
+    >
+      ✓
+    </span>
+
+  </button>
+
+  <span className="text-sm leading-relaxed text-white/65">
+
     I agree to the{" "}
+
     <Link
       href="/terms"
-      className="underline underline-offset-4 hover:text-white"
+      className="
+        underline
+        underline-offset-4
+
+        transition
+
+        hover:text-white
+      "
     >
       Shipping Policy
-    </Link>{" "}
-    and{" "}
+    </Link>
+
+    {" "}and{" "}
+
     <Link
       href="/returns"
-      className="underline underline-offset-4 hover:text-white"
+      className="
+        underline
+        underline-offset-4
+
+        transition
+
+        hover:text-white
+      "
     >
       Returns Policy
-    </Link>.
-  </span>
+    </Link>
 
+    .
+
+  </span>
 </label>
 
   {errors.acceptTerms && (
