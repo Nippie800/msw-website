@@ -11,10 +11,10 @@ export async function POST(req: Request) {
     } = body;
 
     const merchantId =
-      process.env.PAYFAST_MERCHANT_ID;
+  process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_ID;
 
-    const merchantKey =
-      process.env.PAYFAST_MERCHANT_KEY;
+const merchantKey =
+  process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_KEY;
 
     const passphrase =
       process.env.PAYFAST_PASSPHRASE;
