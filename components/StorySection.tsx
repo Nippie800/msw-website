@@ -19,18 +19,7 @@ export default function StorySection() {
 
             <div className="mt-8 space-y-6 text-base leading-8 text-white/65 md:text-lg">
               <p>
-                Two dreamers under the stars. Talking about a future nobody else
-                can see yet.
-              </p>
-
-              <p>
-                That is the spirit behind MSW — Made Somehow. A brand for the
-                ones who keep building even when the path is unclear.
-              </p>
-
-              <p>
-                It is not about having everything figured out. It is about
-                belief, motion, and finding a way forward one way or another.
+               MadeSumhow is a brand that vitalises the importance of community through garments. The garments themselves are a representation of the brand motto “One Way Or Another”, emphasising that whatever needs to be done will be done, each garment made with quality and designed with time and inspiration for the people to wear with a sense of belief, confidence and purpose on a day-to-day basis. Each drop and collection has a different angle towards it, in the same manner experiences and attitudes do, each one made with purpose and time.
               </p>
             </div>
           </div>
