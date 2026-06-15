@@ -393,55 +393,52 @@ const inputStyles = (error: string) => `
                {/* TERMS */}
 <div>
 
-  <label className="flex items-start gap-4">
+  <label className="flex items-start gap-3 cursor-pointer">
 
-    <input
-      type="checkbox"
-      name="acceptTerms"
-      checked={form.acceptTerms}
-      onChange={handleChange}
-      className="mt-1 h-4 w-4 accent-white"
-    />
+  <input
+    type="checkbox"
+    checked={form.acceptTerms}
+    onChange={(e) =>
+      setForm({
+        ...form,
+        acceptTerms: e.target.checked,
+      })
+    }
+    className="
+      mt-[2px]
 
-    <span className="text-sm leading-6 text-white/60">
+      h-5
+      w-5
 
-      I agree to the{" "}
+      accent-white
 
-      <Link
-        href="/terms"
-        target="_blank"
-        className="
-          text-white
-          underline
-          underline-offset-4
-          transition
-          hover:text-white/70
-        "
-      >
-        Shipping Policy
-      </Link>
+      rounded-none
 
-      {" "}and{" "}
+      border
+      border-white/40
 
-      <Link
-        href="/returns"
-        target="_blank"
-        className="
-          text-white
-          underline
-          underline-offset-4
-          transition
-          hover:text-white/70
-        "
-      >
-        Returns Policy
-      </Link>
+      bg-black
+    "
+  />
 
-      .
+  <span className="text-sm text-white/65 leading-relaxed">
+    I agree to the{" "}
+    <Link
+      href="/terms"
+      className="underline underline-offset-4 hover:text-white"
+    >
+      Shipping Policy
+    </Link>{" "}
+    and{" "}
+    <Link
+      href="/returns"
+      className="underline underline-offset-4 hover:text-white"
+    >
+      Returns Policy
+    </Link>.
+  </span>
 
-    </span>
-
-  </label>
+</label>
 
   {errors.acceptTerms && (
     <p className="mt-3 text-xs tracking-wide text-red-400">
