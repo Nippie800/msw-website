@@ -375,20 +375,83 @@ const inputStyles = (error: string) => `
               <div className="mt-10 space-y-5 border-t border-white/10 pt-8">
 
                 {/* COMMUNITY */}
-                <label className="flex items-start gap-4">
-                  <input
-                    type="checkbox"
-                    name="joinCommunity"
-                    checked={form.joinCommunity}
-                    onChange={handleChange}
-                    className="mt-1 h-4 w-4 accent-white"
-                  />
+                <label
+  className="
+    mt-6
+    flex
+    cursor-pointer
+    items-start
+    gap-3
+    select-none
+  "
+>
 
-                  <span className="text-sm leading-6 text-white/60">
-                    Join the MSW community for early drops,
-                    exclusive updates and future releases.
-                  </span>
-                </label>
+  <button
+    type="button"
+    onClick={() =>
+      setForm({
+        ...form,
+        joinCommunity: !form.joinCommunity,
+      })
+    }
+    className="
+      relative
+
+      flex
+      h-5
+      w-5
+      shrink-0
+
+      items-center
+      justify-center
+
+      border
+      border-white/40
+
+      bg-black
+
+      transition-all
+      duration-300
+
+      hover:border-white
+    "
+  >
+
+    <span
+      className={`
+        absolute
+
+        text-xs
+        text-white
+
+        transition-all
+        duration-200
+
+        ${
+          form.joinCommunity
+            ? "scale-100 opacity-100"
+            : "scale-50 opacity-0"
+        }
+      `}
+    >
+      ✓
+    </span>
+
+  </button>
+
+  <span className="text-sm leading-6 text-white/60">
+
+    Join the MSW community for
+
+    <span className="text-white">
+      {" "}early drops
+    </span>
+
+    , exclusive updates and future releases.
+
+  </span>
+
+</label>
 
                {/* TERMS */}
 <div>
