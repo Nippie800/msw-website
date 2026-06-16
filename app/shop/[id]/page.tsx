@@ -198,9 +198,15 @@ export default async function ProductPage({
 
           >
 
-            Made Somehow
+           MADE SUMHOW™
+
 
           </p>
+          <p className="mt-2 text-[10px] uppercase tracking-[0.35em] text-white/35">
+
+  Powered By Pro Don Gear
+
+</p>
 
           {/* TITLE */}
 

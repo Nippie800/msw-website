@@ -3,8 +3,10 @@ import Image from "next/image";
 const looks = [
   "/looks/look-1.png",
   "/looks/look-2.png",
+  "/looks/look-5.png",
   "/looks/look-3.png",
   "/looks/look-4.png",
+  "/looks/look-6.png",
 ];
 
 export default function LookbookSection() {

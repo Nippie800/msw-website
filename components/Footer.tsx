@@ -23,14 +23,21 @@ export default function Footer() {
             </p>
 
             <h3 className="mt-3 text-3xl font-semibold uppercase tracking-tight md:text-4xl">
-              MadeSumehow
+              MadeSumhow
             </h3>
 
             <p className="mt-4 max-w-md text-sm leading-7 text-white/45">
               Built for the ones who keep moving,
               no matter what the road looks like.
+              MSW™
+
+
             </p>
 
+ <p>
+             Powered by PDG®
+              
+            </p>
           </div>
 
           {/* RIGHT */}
@@ -56,6 +63,7 @@ export default function Footer() {
 <Link href="/returns">
   Returns Policy
 </Link>
+
         {/* BOTTOM BAR */}
         <div className="mt-12 border-t border-white/10 pt-6">
 
@@ -67,6 +75,7 @@ export default function Footer() {
 
             <p>
               Crafted With Purpose
+              
             </p>
 
           </div>
