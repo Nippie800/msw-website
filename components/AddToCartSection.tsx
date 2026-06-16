@@ -43,10 +43,12 @@ export default function AddToCartSection({
     product.stock <= 0;
 
   const isAccessory =
-
     product.name
       .toLowerCase()
       .includes("beanie");
+
+  const requiresSize =
+    !isAccessory;
 
   const finalSize =
 
@@ -56,11 +58,21 @@ export default function AddToCartSection({
 
       : selectedSize;
 
+  const cannotAdd =
+
+    soldOut ||
+
+    (requiresSize &&
+      !selectedSize);
+
   const handleAddToCart = () => {
 
     if (
-      !isAccessory &&
+
+      requiresSize &&
+
       !selectedSize
+
     ) {
 
       setSizeError(true);
@@ -95,9 +107,9 @@ export default function AddToCartSection({
 
     <div className="mt-12">
 
-      {/* SIZE SECTION */}
+      {/* SIZE SELECTOR */}
 
-      {!isAccessory && (
+      {requiresSize && (
 
         <>
 
@@ -165,11 +177,11 @@ export default function AddToCartSection({
 
                         ?
 
-                          "border-white bg-white text-black"
+                        "border-white bg-white text-black"
 
                         :
 
-                          "border-white/20 text-white hover:border-white"
+                        "border-white/20 text-white hover:border-white"
 
                     }
 
@@ -198,12 +210,12 @@ export default function AddToCartSection({
 
                 tracking-[0.2em]
 
-                text-white/60
+                text-red-400
               "
 
             >
 
-              Please select a size first
+              Please select a size
 
             </p>
 
@@ -213,7 +225,7 @@ export default function AddToCartSection({
 
       )}
 
-      {/* ACCESSORY LABEL */}
+      {/* ACCESSORY */}
 
       {isAccessory && (
 
@@ -265,7 +277,7 @@ export default function AddToCartSection({
 
       <button
 
-        disabled={soldOut}
+        disabled={cannotAdd}
 
         onClick={handleAddToCart}
 
@@ -295,15 +307,37 @@ export default function AddToCartSection({
 
           ${
 
-            soldOut
+            cannotAdd
 
               ?
 
-                "cursor-not-allowed border-white/10 bg-white/5 text-white/30"
+              `
+
+              cursor-not-allowed
+
+              border-white/10
+
+              bg-white/5
+
+              text-white/30
+
+              `
 
               :
 
-                "border-white bg-white text-black hover:bg-transparent hover:text-white"
+              `
+
+              border-white
+
+              bg-white
+
+              text-black
+
+              hover:bg-transparent
+
+              hover:text-white
+
+              `
 
           }
 
@@ -317,11 +351,20 @@ export default function AddToCartSection({
 
             ?
 
-              "Sold Out"
+            "Sold Out"
 
             :
 
-              "Add To Cart"
+            requiresSize &&
+              !selectedSize
+
+            ?
+
+            "Select Size"
+
+            :
+
+            "Add To Cart"
 
         }
 
