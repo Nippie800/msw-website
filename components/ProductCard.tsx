@@ -34,9 +34,12 @@ export default function ProductCard({
     <div
       className="
         group
-        min-w-[220px]
-        sm:min-w-[260px]
-        md:min-w-[420px]
+
+        min-w-[240px]
+
+        sm:min-w-[280px]
+
+        md:min-w-[340px]
       "
     >
 
@@ -47,7 +50,7 @@ export default function ProductCard({
 
         {/* IMAGE */}
 
-        <div className="relative overflow-hidden bg-black">
+        <div className="relative bg-black">
 
           {soldOut && (
 
@@ -81,23 +84,25 @@ export default function ProductCard({
           <div
 
             className={`
+
               relative
+
               mx-auto
 
-              transition
-              duration-700
+              flex
 
-              group-hover:scale-[1.03]
+              items-end
 
-              ${
-                isAccessory
+              justify-center
 
-                  ? "h-[260px] w-[220px]"
-
-                  : "h-[340px] w-[300px]"
-              }
+            ${
+  isAccessory
+    ? "h-[340px] w-[300px]"
+    : "h-[340px] w-[300px]"
+}
 
             `}
+
           >
 
             <Image
@@ -106,16 +111,38 @@ export default function ProductCard({
 
               alt={product.name}
 
-              fill
+              width={1200}
 
-              sizes="
-                (max-width:768px) 220px,
-                300px
-              "
+              height={1200}
 
-              className="
+              className={`
+
                 object-contain
-              "
+
+                transition
+
+                duration-700
+
+                ease-out
+
+                group-hover:scale-[1.03]
+
+                ${
+
+                  isAccessory
+
+                    ?
+
+                    "max-h-[260px] w-auto"
+
+                    :
+
+                    "max-h-[340px] w-full"
+
+                }
+
+              `}
+
             />
 
           </div>
@@ -124,11 +151,28 @@ export default function ProductCard({
 
         {/* INFO */}
 
-        <div className="mt-5 space-y-2">
+        <div
+
+          className="
+
+            mt-5
+
+            flex
+
+            flex-col
+
+            items-start
+
+            gap-2
+
+          "
+
+        >
 
           <h3
 
             className="
+
               text-[11px]
 
               uppercase
@@ -136,6 +180,7 @@ export default function ProductCard({
               tracking-[0.2em]
 
               text-white
+
             "
 
           >
@@ -147,9 +192,11 @@ export default function ProductCard({
           <p
 
             className="
+
               text-[11px]
 
               text-white/60
+
             "
 
           >
@@ -163,7 +210,6 @@ export default function ProductCard({
           <p
 
             className="
-              inline-block
 
               text-[10px]
 
@@ -178,6 +224,7 @@ export default function ProductCard({
               duration-300
 
               group-hover:text-white
+
             "
 
           >

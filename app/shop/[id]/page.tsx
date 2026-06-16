@@ -140,25 +140,37 @@ export default async function ProductPage({
 
           >
 
-            <Image
+            <div
+  className={`
 
-              src={product.images[0]}
+    relative
+    mx-auto
 
-              alt={product.name}
+    ${
+      isAccessory
 
-              width={1400}
+        ? "w-[70%] max-w-[280px] md:w-[380px]"
 
-              height={1400}
+        : "w-full"
+    }
 
-              priority
+  `}
+>
 
-              className="
-                h-auto
-                w-full
-                object-contain
-              "
+  <Image
+    src={product.images[0]}
+    alt={product.name}
+    width={1400}
+    height={1400}
+    priority
+    className="
+      h-auto
+      w-full
+      object-contain
+    "
+  />
 
-            />
+</div>
 
           </div>
 
@@ -267,44 +279,6 @@ export default async function ProductPage({
           {isAccessory ? (
 
             <div className="mt-14">
-
-              <p
-
-                className="
-                  text-[10px]
-
-                  uppercase
-
-                  tracking-[0.35em]
-
-                  text-white/40
-                "
-
-              >
-
-                Fit
-
-              </p>
-
-              <p
-
-                className="
-                  mt-3
-
-                  text-sm
-
-                  uppercase
-
-                  tracking-[0.25em]
-
-                  text-white
-                "
-
-              >
-
-                One Size Fits All
-
-              </p>
 
               <AddToCartSection
                 product={product}
