@@ -23,7 +23,7 @@ export default function Footer() {
             </p>
 
             <h3 className="mt-3 text-3xl font-semibold uppercase tracking-tight md:text-4xl">
-              Made Somehow
+              MadeSumehow
             </h3>
 
             <p className="mt-4 max-w-md text-sm leading-7 text-white/45">

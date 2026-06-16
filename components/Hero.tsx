@@ -79,11 +79,11 @@ useEffect(() => {
           </div>
 
           <p className="mb-4 text-[10px] uppercase tracking-[0.45em] text-white/70 md:text-xs">
-            Made Somehow
+            MadeSumhow
           </p>
 
           <h1 className="max-w-5xl text-4xl sm:text-5xl md:text-7xl lg:text-8xl">
-            MADE SOMEHOW
+            MADESUMHOW
           </h1>
 
           <p className="mt-6 text-sm uppercase tracking-[0.28em] text-white/85 md:text-base">
