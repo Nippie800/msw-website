@@ -91,7 +91,7 @@ useEffect(() => {
           </p>
 
           <p className="mt-6 max-w-2xl text-sm leading-7 text-white/75 md:text-base">
-            Built for the ones who keep moving when the odds say stop.
+           Powered by Pro Don Gear
           </p>
 
           <div className="mt-8 flex w-full max-w-xs flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center">
