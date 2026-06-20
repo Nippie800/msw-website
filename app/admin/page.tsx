@@ -50,11 +50,21 @@ type Order = {
   };
 };
 type Product = {
+
   id: string;
+
   name: string;
+
+  description?: string;
+
   price: number;
+
   stock: number;
+
   image: string;
+
+  sizes?: string[];
+
 };
 type Subscriber = {
   id: string;
@@ -104,9 +114,19 @@ export default function AdminPage() {
   const [editingProduct, setEditingProduct] =
   useState<string | null>(null);
 
-const [editValues, setEditValues] = useState({
+const [editValues, setEditValues] =
+useState({
+
+  name: "",
+
+  description: "",
+
   price: "",
+
   stock: "",
+
+  sizes: "",
+
 });
 const [showAddModal, setShowAddModal] =
   useState(false);
@@ -244,32 +264,131 @@ fetchProducts();
 const handleSaveProduct = async (
   productId: string
 ) => {
+
+  console.log("SAVE CLICKED");
+
+  console.log(editValues);
+
+  console.log(productId);
+
   try {
+
     await updateDoc(
-      doc(db, "products", productId),
+      doc(
+        db,
+        "products",
+        productId
+      ),
       {
-        price: Number(editValues.price),
-        stock: Number(editValues.stock),
+
+        name:
+          editValues.name,
+
+        description:
+          editValues.description,
+
+        price:
+          Number(
+            editValues.price
+          ),
+
+        stock:
+          Number(
+            editValues.stock
+          ),
+
+        sizes:
+
+          editValues.sizes
+
+          .split(",")
+
+          .map(
+
+            size =>
+
+            size.trim()
+
+          )
+
+          .filter(Boolean),
+
+        updatedAt:
+
+          new Date(),
+
       }
     );
 
     setProducts((prev) =>
-      prev.map((product) =>
-        product.id === productId
-          ? {
-              ...product,
-              price: Number(editValues.price),
-              stock: Number(editValues.stock),
-            }
-          : product
-      )
-    );
 
-    setEditingProduct(null);
+  prev.map((product) =>
 
-  } catch (error) {
-    console.error(error);
+    product.id === productId
+
+      ? {
+
+          ...product,
+
+          name:
+
+            editValues.name,
+
+          description:
+
+            editValues.description,
+
+          price:
+
+            Number(
+              editValues.price
+            ),
+
+          stock:
+
+            Number(
+              editValues.stock
+            ),
+
+          sizes:
+
+            (editValues.sizes || "")
+
+            .split(",")
+
+            .map(
+
+              size =>
+
+              size.trim()
+
+            )
+
+            .filter(Boolean),
+
+        }
+
+      : product
+
+  )
+
+);
+
+setEditingProduct(null);
+
+console.log(
+  "PRODUCT UPDATED"
+);
+
+    window.location.reload();
   }
+
+  catch (error) {
+
+    console.error(error);
+
+  }
+
 };
 
 const handleCreateProduct = async () => {
@@ -807,97 +926,331 @@ if (!authorized) {
   {editingProduct === product.id ? (
     <div className="flex flex-col gap-3">
 
-      <input
-        type="number"
-        placeholder="Price"
-        value={editValues.price}
-        onChange={(e) =>
-          setEditValues((prev) => ({
-            ...prev,
-            price: e.target.value,
-          }))
-        }
-        className="
-          border
-          border-white/10
-          bg-black
-          px-4
-          py-3
-          text-sm
-          text-white
-          outline-none
-        "
-      />
+  {/* NAME */}
 
-      <input
-        type="number"
-        placeholder="Stock"
-        value={editValues.stock}
-        onChange={(e) =>
-          setEditValues((prev) => ({
-            ...prev,
-            stock: e.target.value,
-          }))
-        }
-        className="
-          border
-          border-white/10
-          bg-black
-          px-4
-          py-3
-          text-sm
-          text-white
-          outline-none
-        "
-      />
+  <input
 
-      <button
-        onClick={() =>
-          handleSaveProduct(product.id)
-        }
-        className="
-          border
-          border-white
-          bg-white
-          px-5
-          py-3
-          text-[10px]
-          uppercase
-          tracking-[0.25em]
-          text-black
-          transition
-          hover:bg-transparent
-          hover:text-white
-        "
-      >
-        Save
-      </button>
-      <button
-  onClick={() =>
-    handleDeleteProduct(
-      product.id
-    )
-  }
-  className="
-    mt-3
-    w-full
-    border
-    border-red-500/20
-    bg-red-500/10
-    px-4
-    py-3
-    text-[10px]
-    uppercase
-    tracking-[0.3em]
-    text-red-400
-    transition
-    hover:bg-red-500/20
-  "
->
-  Delete Product
-</button>
+    type="text"
 
-    </div>
+    placeholder="Product Name"
+
+    value={editValues.name}
+
+    onChange={(e)=>
+
+      setEditValues((prev)=>({
+
+        ...prev,
+
+        name:e.target.value,
+
+      }))
+
+    }
+
+    className="
+
+      border
+
+      border-white/10
+
+      bg-black
+
+      px-4
+
+      py-3
+
+      text-sm
+
+      text-white
+
+      outline-none
+
+    "
+
+  />
+
+
+
+  {/* DESCRIPTION */}
+
+  <textarea
+
+    rows={4}
+
+    placeholder="Description"
+
+    value={editValues.description}
+
+    onChange={(e)=>
+
+      setEditValues((prev)=>({
+
+        ...prev,
+
+        description:e.target.value,
+
+      }))
+
+    }
+
+    className="
+
+      border
+
+      border-white/10
+
+      bg-black
+
+      px-4
+
+      py-3
+
+      text-sm
+
+      text-white
+
+      outline-none
+
+      resize-none
+
+    "
+
+  />
+
+
+
+  {/* PRICE */}
+
+  <input
+
+    type="number"
+
+    placeholder="Price"
+
+    value={editValues.price}
+
+    onChange={(e)=>
+
+      setEditValues((prev)=>({
+
+        ...prev,
+
+        price:e.target.value,
+
+      }))
+
+    }
+
+    className="
+
+      border
+
+      border-white/10
+
+      bg-black
+
+      px-4
+
+      py-3
+
+      text-sm
+
+      text-white
+
+      outline-none
+
+    "
+
+  />
+
+
+
+  {/* STOCK */}
+
+  <input
+
+    type="number"
+
+    placeholder="Stock"
+
+    value={editValues.stock}
+
+    onChange={(e)=>
+
+      setEditValues((prev)=>({
+
+        ...prev,
+
+        stock:e.target.value,
+
+      }))
+
+    }
+
+    className="
+
+      border
+
+      border-white/10
+
+      bg-black
+
+      px-4
+
+      py-3
+
+      text-sm
+
+      text-white
+
+      outline-none
+
+    "
+
+  />
+
+
+
+  {/* SIZES */}
+
+  <input
+
+    type="text"
+
+    placeholder="Sizes (S,M,L,XL)"
+
+    value={editValues.sizes}
+
+    onChange={(e)=>
+
+      setEditValues((prev)=>({
+
+        ...prev,
+
+        sizes:e.target.value,
+
+      }))
+
+    }
+
+    className="
+
+      border
+
+      border-white/10
+
+      bg-black
+
+      px-4
+
+      py-3
+
+      text-sm
+
+      text-white
+
+      outline-none
+
+    "
+
+  />
+
+
+
+  <button
+
+    onClick={()=>
+
+      handleSaveProduct(
+
+        product.id
+
+      )
+
+    }
+
+    className="
+
+      border
+
+      border-white
+
+      bg-white
+
+      px-5
+
+      py-3
+
+      text-[10px]
+
+      uppercase
+
+      tracking-[0.25em]
+
+      text-black
+
+      transition
+
+      hover:bg-transparent
+
+      hover:text-white
+
+    "
+
+  >
+
+    Save
+
+  </button>
+
+
+
+  <button
+
+    onClick={()=>
+
+      handleDeleteProduct(
+
+        product.id
+
+      )
+
+    }
+
+    className="
+
+      border
+
+      border-red-500/20
+
+      bg-red-500/10
+
+      px-4
+
+      py-3
+
+      text-[10px]
+
+      uppercase
+
+      tracking-[0.3em]
+
+      text-red-400
+
+      transition
+
+      hover:bg-red-500/20
+
+    "
+
+  >
+
+    Delete Product
+
+  </button>
+
+</div>
   ) : (
     <>
       <p className="text-2xl font-semibold">
@@ -909,9 +1262,42 @@ if (!authorized) {
           setEditingProduct(product.id);
 
           setEditValues({
-            price: String(product.price),
-            stock: String(product.stock),
-          });
+
+  name:
+
+    product.name,
+
+  description:
+
+    product.description ||
+
+    "",
+
+  price:
+
+    String(
+
+      product.price
+
+    ),
+
+  stock:
+
+    String(
+
+      product.stock
+
+    ),
+
+  sizes:
+
+    product.sizes?.join(", ")
+
+    ||
+
+    "",
+
+});
         }}
         className="
           border
