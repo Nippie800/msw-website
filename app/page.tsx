@@ -5,12 +5,10 @@ import Manifesto from "@/components/Manifesto";
 import StorySection from "@/components/StorySection";
 import LookbookSection from "@/components/LookbookSection";
 import Footer from "@/components/Footer";
-import StarBackground from "@/components/StarBackground";
 
 export default function HomePage() {
   return (
     <main className="relative min-h-screen bg-black text-white">
-      <StarBackground />
 
       <div className="relative z-10">
         <Navbar />
@@ -21,6 +19,7 @@ export default function HomePage() {
         <LookbookSection />
         <Footer />
       </div>
+
     </main>
   );
 }
