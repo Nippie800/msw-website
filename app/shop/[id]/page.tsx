@@ -157,18 +157,62 @@ export default async function ProductPage({
   `}
 >
 
+  <div
+  className={`
+
+    relative
+
+    mx-auto
+
+    flex
+
+    items-center
+
+    justify-center
+
+    ${
+
+      isAccessory
+
+        ?
+
+        `
+        h-[320px]
+        max-w-[320px]
+
+        md:h-[520px]
+        md:max-w-[520px]
+        `
+
+        :
+
+        `
+        h-[450px]
+
+        md:h-[700px]
+        `
+    }
+
+  `}
+>
+
   <Image
+
     src={product.images[0]}
+
     alt={product.name}
-    width={1400}
-    height={1400}
+
+    fill
+
     priority
-    className="
-      h-auto
-      w-full
-      object-contain
-    "
+
+    sizes="100vw"
+
+    className="object-contain"
+
   />
+
+</div>
 
 </div>
 
