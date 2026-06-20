@@ -123,41 +123,9 @@ export default async function ProductPage({
 
           )}
 
-          <div
+          {/* PRODUCT IMAGE */}
 
-            className={`
-              relative
-              mx-auto
-
-              ${
-                isAccessory
-
-                  ? "h-[520px] w-[420px]"
-
-                  : "w-full"
-              }
-            `}
-
-          >
-
-            <div
-  className={`
-
-    relative
-    mx-auto
-
-    ${
-      isAccessory
-
-        ? "w-[70%] max-w-[280px] md:w-[380px]"
-
-        : "w-full"
-    }
-
-  `}
->
-
-  <div
+<div
   className={`
 
     relative
@@ -170,6 +138,8 @@ export default async function ProductPage({
 
     justify-center
 
+    overflow-hidden
+
     ${
 
       isAccessory
@@ -178,16 +148,16 @@ export default async function ProductPage({
 
         `
         h-[320px]
-        max-w-[320px]
+        w-full
 
         md:h-[520px]
-        md:max-w-[520px]
         `
 
         :
 
         `
         h-[450px]
+        w-full
 
         md:h-[700px]
         `
@@ -208,21 +178,57 @@ export default async function ProductPage({
 
     sizes="100vw"
 
-    className="object-contain"
+    className={`
+
+      object-contain
+
+      transition
+
+      duration-700
+
+      ${
+
+        isAccessory
+
+          ?
+
+          "scale-[0.85] md:scale-[0.9]"
+
+          :
+
+          ""
+
+      }
+
+    `}
 
   />
 
 </div>
 
-</div>
-
-          </div>
-
         </div>
 
         {/* RIGHT */}
 
-        <div className="flex flex-col justify-center">
+        <div
+  className="
+
+    flex
+
+    flex-col
+
+    justify-center
+
+    text-center
+
+    md:text-left
+
+    items-center
+
+    md:items-start
+
+  "
+>
 
           {/* BRAND */}
 
@@ -246,10 +252,22 @@ export default async function ProductPage({
 
 
           </p>
-          <p className="mt-2 text-[10px] uppercase tracking-[0.35em] text-white/35">
+         <p
+  className="
+    mt-3
 
+    text-[9px]
+
+    uppercase
+
+    tracking-[0.45em]
+
+    text-white/25
+
+    md:text-[10px]
+  "
+>
   Powered By Pro Don Gear
-
 </p>
 
           {/* TITLE */}
