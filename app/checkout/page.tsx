@@ -8,12 +8,40 @@ import Link from "next/link";
 
 export default function CheckoutPage() {
   const items = useCartStore((state) => state.items);
-  const { convertPrice } = useCurrency();
+ const {
+
+  currency,
+
+  convertPrice,
+
+} = useCurrency();
 
   const totalPrice = items.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
+
+  const shippingRates = {
+
+  ZAR: 100,
+
+  USD: 450,
+
+  GBP: 915,
+
+  EUR: 700,
+
+};
+
+const shipping =
+
+shippingRates[currency];
+
+const finalTotal =
+
+totalPrice +
+
+shipping;
 
   const [loading, setLoading] = useState(false);
 
@@ -134,12 +162,21 @@ const inputStyles = (error: string) => `
           "Content-Type":
             "application/json",
         },
+body: JSON.stringify({
 
-        body: JSON.stringify({
-          customer,
-          items,
-          total: totalPrice,
-        }),
+  customer,
+
+  items,
+
+  subtotal: totalPrice,
+
+  shipping,
+
+  total: finalTotal,
+
+  currency,
+
+}),
       }
     );
 
@@ -619,56 +656,194 @@ const inputStyles = (error: string) => `
             ))}
           </div>
 
-          {/* TOTAL */}
-          <div className="mt-10 border-t border-white/10 pt-7">
-            <div className="flex items-center justify-between">
-              <p className="text-[11px] uppercase tracking-[0.25em] text-white/45">
-                Total
-              </p>
+          {/* ORDER TOTALS */}
 
-              <p className="text-3xl font-semibold tracking-tight">
-  {convertPrice(totalPrice)}
-</p>
-            </div>
+<div className="mt-10 border-t border-white/10 pt-7">
 
-            <button
-              onClick={handlePayment}
-              disabled={loading || items.length === 0}
-              className="
-                mt-8
-                flex
-                w-full
-                items-center
-                justify-center
-                border
-                border-white
-                bg-white
-                px-6
-                py-5
-                text-xs
-                font-medium
-                uppercase
-                tracking-[0.35em]
-                text-black
-                transition-all
-                duration-300
-                hover:scale-[1.01]
-                hover:bg-transparent
-                hover:text-white
-                active:scale-[0.99]
-                disabled:cursor-not-allowed
-                disabled:border-white/10
-                disabled:bg-white/5
-                disabled:text-white/30
-              "
-            >
-              {loading ? "Redirecting..." : "Continue To Payment"}
-            </button>
+  {/* SUBTOTAL */}
 
-            <p className="mt-5 text-center text-xs text-white/30">
-              Secure payment powered by PayFast
-            </p>
-          </div>
+  <div className="flex items-center justify-between">
+
+    <p className="text-[11px] uppercase tracking-[0.25em] text-white/45">
+
+      Subtotal
+
+    </p>
+
+    <p className="text-lg">
+
+      {convertPrice(totalPrice)}
+
+    </p>
+
+  </div>
+
+
+  {/* SHIPPING */}
+
+  <div className="mt-5 flex items-center justify-between">
+
+    <p className="text-[11px] uppercase tracking-[0.25em] text-white/45">
+
+      Shipping
+
+      {
+
+        currency === "ZAR"
+
+        &&
+
+        " (South Africa)"
+
+      }
+
+      {
+
+        currency === "GBP"
+
+        &&
+
+        " (United Kingdom)"
+
+      }
+
+    </p>
+
+    <p className="text-lg">
+
+      {convertPrice(shipping)}
+
+    </p>
+
+  </div>
+
+
+  <div className="my-7 border-t border-white/10" />
+
+
+  {/* FINAL TOTAL */}
+
+  <div className="flex items-center justify-between">
+
+    <p className="text-[11px] uppercase tracking-[0.25em] text-white">
+
+      Total
+
+    </p>
+
+    <p className="text-3xl font-semibold tracking-tight">
+
+      {convertPrice(finalTotal)}
+
+    </p>
+
+  </div>
+
+
+  <button
+
+    onClick={handlePayment}
+
+    disabled={
+
+      loading ||
+
+      items.length === 0
+
+    }
+
+    className="
+
+      mt-8
+
+      flex
+
+      w-full
+
+      items-center
+
+      justify-center
+
+      border
+
+      border-white
+
+      bg-white
+
+      px-6
+
+      py-5
+
+      text-xs
+
+      font-medium
+
+      uppercase
+
+      tracking-[0.35em]
+
+      text-black
+
+      transition-all
+
+      duration-300
+
+      hover:scale-[1.01]
+
+      hover:bg-transparent
+
+      hover:text-white
+
+      active:scale-[0.99]
+
+      disabled:cursor-not-allowed
+
+      disabled:border-white/10
+
+      disabled:bg-white/5
+
+      disabled:text-white/30
+
+    "
+
+  >
+
+    {
+
+      loading
+
+        ?
+
+        "Redirecting..."
+
+        :
+
+        "Continue To Payment"
+
+    }
+
+  </button>
+
+
+  <p
+
+    className="
+      mt-5
+
+      text-center
+
+      text-xs
+
+      text-white/30
+    "
+
+  >
+
+    Secure payment powered by PayFast
+
+  </p>
+
+</div>
         </div>
       </div>
     </main>

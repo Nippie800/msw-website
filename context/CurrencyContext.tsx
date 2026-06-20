@@ -19,6 +19,17 @@ const exchangeRates = {
   EUR: 20.8,
 };
 
+const shippingRates = {
+
+  ZAR: 100,
+
+  USD: 450,
+
+  GBP: 915,
+
+  EUR: 700,
+
+};
 type CurrencyContextType = {
   currency: Currency;
   setCurrency: (
@@ -54,6 +65,10 @@ export function CurrencyProvider({
       exchangeRates[
         currency
       ];
+
+      const shipping =
+
+shippingRates[currency];
 
     switch (currency) {
       case "USD":

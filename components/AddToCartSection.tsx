@@ -225,6 +225,40 @@ export default function AddToCartSection({
 
       )}
 
+      <div className="mt-8 space-y-3 border-t border-white/10 pt-6">
+
+  <div className="flex justify-between text-sm">
+
+    <span className="uppercase tracking-[0.25em] text-white/40">
+      South Africa
+    </span>
+
+    <span className="text-white">
+      R100 Delivery
+    </span>
+
+  </div>
+
+  <div className="flex justify-between text-sm">
+
+    <span className="uppercase tracking-[0.25em] text-white/40">
+      United Kingdom
+    </span>
+
+    <span className="text-white">
+      R915 Delivery
+    </span>
+
+  </div>
+
+  <p className="pt-3 text-xs uppercase tracking-[0.25em] text-white/30">
+
+    Shipping calculated automatically at checkout.
+
+  </p>
+
+</div>
+
       {/* ACCESSORY */}
 
       {isAccessory && (
