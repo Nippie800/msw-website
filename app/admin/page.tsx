@@ -394,6 +394,46 @@ const handleUpdateOrderStatus = async (
     console.error(error);
   }
 };
+
+const handleDelete = async (
+  id: string
+) => {
+
+  const confirmed =
+    confirm(
+      "Delete this order?"
+    );
+
+  if (!confirmed)
+    return;
+
+  const response =
+    await fetch(
+
+      `/api/orders/${id}`,
+
+      {
+
+        method:
+
+          "DELETE",
+
+      }
+
+    );
+
+  if (response.ok) {
+
+    alert(
+      "Order deleted"
+    );
+
+    window.location.reload();
+
+  }
+
+};
+
 const toggleOrder = (
   orderId: string
 ) => {
@@ -610,7 +650,61 @@ if (!authorized) {
     ? "Hide Details"
     : "View Details"}
 </button>
+<button
+  onClick={() =>
+    toggleOrder(order.id)
+  }
+  className="
+    mt-4
+    border
+    border-white/10
+    px-4
+    py-2
+    text-[10px]
+    uppercase
+    tracking-[0.25em]
+    text-white/70
+    transition
+    hover:text-white
+  "
+>
+  {selectedOrder === order.id
+    ? "Hide Details"
+    : "View Details"}
+</button>
 
+<button
+  onClick={() =>
+    handleDelete(order.id)
+  }
+  className="
+    border
+    border-red-500/20
+
+    bg-red-500/10
+
+    px-4
+    py-2
+
+    text-[10px]
+
+    uppercase
+
+    tracking-[0.25em]
+
+    text-red-400
+
+    transition
+
+    hover:bg-red-500/20
+
+    hover:text-red-300
+  "
+>
+
+  Delete Order
+
+</button>
                   </div>
 {selectedOrder === order.id && (
   <div
