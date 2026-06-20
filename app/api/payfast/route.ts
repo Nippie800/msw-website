@@ -8,16 +8,14 @@ export async function POST(req: Request) {
       name,
       email,
       total,
+      orderNumber,
     } = body;
 
     const merchantId =
-  process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_ID;
+      process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_ID;
 
-const merchantKey =
-  process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_KEY;
-
-    const passphrase =
-      process.env.PAYFAST_PASSPHRASE;
+    const merchantKey =
+      process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_KEY;
 
     const returnUrl =
       process.env.PAYFAST_RETURN_URL;
@@ -27,10 +25,6 @@ const merchantKey =
 
     const notifyUrl =
       process.env.PAYFAST_NOTIFY_URL;
-
-    /*
-      Safety checks
-    */
 
     if (
       !merchantId ||
@@ -50,39 +44,48 @@ const merchantKey =
       );
     }
 
-    console.log({
-  merchantId,
-  merchantKey,
-  returnUrl,
-  cancelUrl,
-  notifyUrl,
-  passphrase,
-});
-   const paymentData = {
-  merchant_id: merchantId,
-
-  merchant_key: merchantKey,
-
-  return_url: returnUrl,
-
-  cancel_url: cancelUrl,
-
-  notify_url: notifyUrl,
-
-  name_first: name,
-
-  email_address: email,
-
-  amount: Number(total).toFixed(2),
-
-  item_name: "MSW Order",
-};
-
     /*
-      Add passphrase if present
+      IMPORTANT
+
+      total MUST already include:
+
+      subtotal + shipping
+
+      Example:
+
+      350 + 100 = 450
     */
 
-   
+    const amount =
+      Number(total).toFixed(2);
+
+    const paymentData = {
+      merchant_id: merchantId,
+
+      merchant_key: merchantKey,
+
+      return_url: returnUrl,
+
+      cancel_url: cancelUrl,
+
+      notify_url: notifyUrl,
+
+      name_first: name,
+
+      email_address: email,
+
+      amount,
+
+      item_name: "MSW Order",
+
+      custom_str1:
+        orderNumber || "",
+    };
+
+    console.log(
+      "PAYFAST PAYMENT DATA:",
+      paymentData
+    );
 
     const queryString =
       new URLSearchParams(
@@ -92,22 +95,30 @@ const merchantKey =
     const paymentUrl =
       `https://www.payfast.co.za/eng/process?${queryString}`;
 
+    console.log(
+      "PAYFAST URL:",
+      paymentUrl
+    );
+
     return NextResponse.json({
       url: paymentUrl,
     });
-  } catch (error) {
-   console.error(
-  "PAYFAST ERROR:",
-  error
-);
 
-return NextResponse.json(
-  {
-    error: String(error),
-  },
-  {
-    status: 500,
-  }
-);
+  } catch (error) {
+
+    console.error(
+      "PAYFAST ERROR:",
+      error
+    );
+
+    return NextResponse.json(
+      {
+        error:
+          "Failed to create PayFast payment",
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }

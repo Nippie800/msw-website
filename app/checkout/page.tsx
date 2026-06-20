@@ -21,18 +21,18 @@ export default function CheckoutPage() {
     0
   );
 
+  
   const shippingRates = {
 
-  ZAR: 100,
+  ZAR: 100, // South Africa
 
-  USD: 450,
+  GBP: 915, // United Kingdom
 
-  GBP: 915,
+  USD: 915, // Temporary
 
-  EUR: 700,
+  EUR: 915, // Temporary
 
 };
-
 const shipping =
 
 shippingRates[currency];
@@ -202,11 +202,23 @@ body: JSON.stringify({
             "application/json",
         },
 
-        body: JSON.stringify({
-          name: customer.name,
-          email: customer.email,
-          total: totalPrice,
-        }),
+       body: JSON.stringify({
+
+  name: customer.name,
+
+  email: customer.email,
+
+  total: finalTotal,
+
+  currency,
+
+  shipping,
+
+  orderNumber:
+
+    orderData.orderNumber,
+
+}),
       }
     );
 
@@ -224,14 +236,31 @@ body: JSON.stringify({
     */
     if (data.url) {
       localStorage.setItem(
-        "msw_last_order",
-        JSON.stringify({
-          orderNumber:
-            orderData.orderNumber,
-          items,
-          total: totalPrice,
-        })
-      );
+  "msw_last_order",
+
+  JSON.stringify({
+
+    orderNumber:
+
+      orderData.orderNumber,
+
+    items,
+
+    subtotal:
+
+      totalPrice,
+
+    shipping,
+
+    total:
+
+      finalTotal,
+
+    currency,
+
+  })
+
+);
 
       window.location.href =
         data.url;
