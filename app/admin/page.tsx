@@ -914,6 +914,9 @@ if (!authorized) {
             <h3 className="text-lg font-semibold">
               {product.name}
             </h3>
+             <h3 className="text-lg font-semibold">
+              {product.name}
+            </h3>
 
             <p className="mt-2 text-sm text-white/45">
               Stock: {product.stock}
